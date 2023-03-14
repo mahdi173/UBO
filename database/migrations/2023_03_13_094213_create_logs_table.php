@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->string('user_name');
             $table->string('action');
-            $table->string('entité_modifié');
+            $table->json('json_detail');
+            $table->string('modified_model');
+            $table->integer('loggable_id');
             $table->string('status');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

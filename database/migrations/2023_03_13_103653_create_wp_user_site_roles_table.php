@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('wp_site_id')->references('id')->on('wp_sites')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('wp_role_id');
             $table->foreign('wp_role_id')->references('id')->on('wp_roles')->onDelete('restrict')->onUpdate('restrict');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

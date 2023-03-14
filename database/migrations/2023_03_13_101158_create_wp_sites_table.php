@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('wp_sites', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('domain');
             $table->unsignedBigInteger('pole_id');
             $table->foreign('pole_id')->references('id')->on('poles')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('restrict')->onUpdate('restrict');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }
