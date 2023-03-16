@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -20,9 +20,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'userName',
+        'firstName',
+        'lastName',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -43,11 +46,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    
+    /**
+     * Role
+     *
+     * @return void
+     */
     public function Role(){
         return $this->belongsTo(Role::class);
     }
-
+    
+    /**
+     * logs
+     *
+     * @return MorphMany
+     */
     public function logs(): MorphMany
     {
         return $this->morphMany(Log::class, 'loggable');

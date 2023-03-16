@@ -10,15 +10,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Type extends Model
 {
     use HasFactory, SoftDeletes;
-
+    
+    /**
+     * fillable
+     *
+     * @var array
+     */
     protected $fillable = [
         'name'
     ];
-
+    
+    /**
+     * wpSites
+     *
+     * @return void
+     */
     public function wpSites(){
         return $this->hasMany(WpSite::class);
     }
-
+    
+    /**
+     * logs
+     *
+     * @return MorphMany
+     */
     public function logs(): MorphMany
     {
         return $this->morphMany(Log::class, 'loggable');
