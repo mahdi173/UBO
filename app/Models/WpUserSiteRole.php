@@ -11,7 +11,16 @@ class WpUserSiteRole extends Model
 {
     use HasFactory, SoftDeletes;
    
-
+    /**
+     * fillable
+     *
+     * @var array
+     */
+    protected $fillable = [
+      'wp_user_id',
+      'wp_role_id',
+      'wp_site_id'
+    ];
     
     /**
      * wpUser
