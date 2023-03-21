@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\WpUserFilters;
 use App\Http\Requests\RegisterRequest;
 use App\Models\WpUser;
 use App\Services\WpUserService;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Spatie\FlareClient\Http\Exceptions\NotFound;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class WpUserController extends Controller
 {

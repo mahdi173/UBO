@@ -26,11 +26,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::resource('/wp-roles', WpRoleController::class); 
-    Route::resource('/wp-sites', WpSiteController::class); 
-    Route::resource('/wp-users', WpUserController::class);
+    Route::get('wp-sites', [WpSiteController::class, 'index'])->name('wp-sites.index');
+    Route::post('wp-sites', [WpSiteController::class, 'store'])->name('wp-sites.store');
+    Route::put('wp-sites/{wpSite}', [WpSiteController::class, 'update'])->name('wp-sites.update');
+    Route::delete('wp-sites/{wpSite}', [WpSiteController::class, 'destroy'])->name('wp-sites.destroy');
+    Route::get('wp-sites/{wpSite}', [WpSiteController::class, 'show'])->name('wp-sites.show');
+
+    Route::get('wp-users', [WpUserController::class, 'index'])->name('wp-users.index');
+    Route::post('wp-users', [WpUserController::class, 'store'])->name('wp-users.store');
+    Route::put('wp-users/{wpUser}', [WpUserController::class, 'update'])->name('wp-users.update');
+    Route::delete('wp-users/{wpUser}', [WpUserController::class, 'destroy'])->name('wp-users.destroy');
+    Route::get('wp-users/{wpUser}', [WpUserController::class, 'show'])->name('wp-users.show');
+
+    Route::get('wp-roles', [WpRoleController::class, 'index'])->name('wp-roles.index');
+    Route::post('wp-roles', [WpRoleController::class, 'store'])->name('wp-roles.store');
+    Route::put('wp-roles/{wpRole}', [WpRoleController::class, 'update'])->name('wp-roles.update');
+    Route::delete('wp-roles/{wpRole}', [WpRoleController::class, 'destroy'])->name('wp-roles.destroy');
+    Route::get('wp-roles/{wpRole}', [WpRoleController::class, 'show'])->name('wp-roles.show');
+
 });
 
 Route::post('/register', [AuthController::class, 'register']);

@@ -6,12 +6,10 @@ use App\Http\Requests\StoreWpSiteRequest;
 use App\Models\WpSite;
 use App\Services\WpSiteService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class WpSiteController extends Controller
 {
-      
-     /**
+      /**
      * __construct
      *
      * @param  WpSiteService $wpSiteService

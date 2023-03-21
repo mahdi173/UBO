@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Http\Requests\StoreWpRoleRequest;
 use App\Models\WpRole;
-use App\Models\WpSite;
 use App\Services\WpRoleService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class WpRoleController extends Controller
 {
-    /**
+     /**
      * __construct
      *
      * @param  WpRoleService $wpRoleService
