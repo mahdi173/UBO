@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('wp_users', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('firstname');
+            $table->string('userName')->unique();
+            $table->string('firstName');
             $table->string('lastName');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

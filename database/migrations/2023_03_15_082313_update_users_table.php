@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wp_sites', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('domain');
-            $table->softDeletes(); 
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wp_sites');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };
