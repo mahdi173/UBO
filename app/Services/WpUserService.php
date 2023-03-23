@@ -2,23 +2,20 @@
 
 namespace App\Services;
 
-use App\Interfaces\WpUserRepositoryInterface;
+use App\Interfaces\CrudInterface;
 use App\Models\WpUser;
-use App\Traits\DeleteObjectTrait;
+use App\Repositories\WpUserRepository;
 use Illuminate\Http\JsonResponse;
 
 class WpUserService
-{ 
-    use DeleteObjectTrait;
-    
-      
+{         
     /**
      * __construct
      *
-     * @param  WpUserRepositoryInterface $wpUserRepository
+     * @param  WpUserRepository $wpUserRepository
      * @return void
      */
-    public function __construct(private WpUserRepositoryInterface $wpUserRepository)
+    public function __construct(private WpUserRepository $wpUserRepository)
     {
     }
 
@@ -29,8 +26,7 @@ class WpUserService
      */
     public function getAllWpUsers(): JsonResponse
     {
-        $data= $this->wpUserRepository->getAllWpUsers();
-
+        $data= $this->wpUserRepository->getAll();
         return response()->json($data);
     }
     
@@ -41,17 +37,8 @@ class WpUserService
      * @return JsonResponse
      */
     public function storeWpUser(array $data): JsonResponse 
-    {
-        $userData= [
-            'userName' => $data['userName'],
-            'firstName' => $data['firstName'],
-            'lastName' => $data['lastName'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password'])
-        ];
-      
-        $wpUser = $this->wpUserRepository->createWpUser($userData);
-
+    { 
+        $wpUser = $this->wpUserRepository->create($data);
         return response()->json($wpUser, 200);
     }
     
@@ -64,7 +51,7 @@ class WpUserService
      */
     public function updateWpUser(array $data, WpUser $wpUser): JsonResponse
     {
-        $wpUser->update($data);
+        $this->wpUserRepository->update($wpUser, $data);
         return response()->json($wpUser, 200);
     }
     
@@ -76,6 +63,7 @@ class WpUserService
      */
     public function deleteWpUser( WpUser $wpUser): JsonResponse
     {
-        return $this->deleteRecord($wpUser);
+        $this->wpUserRepository->delete($wpUser);
+        return response()->json(["msg"=>"Item successfully deleted!"], 200);
     }
 }

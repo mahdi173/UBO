@@ -2,27 +2,48 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\WpSiteRepositoryInterface;
+use App\Interfaces\CrudInterface;
 use App\Models\WpSite;
 
-class WpSiteRepository implements WpSiteRepositoryInterface 
-{    
+class WpSiteRepository implements CrudInterface 
+{      
     /**
-     * getAllWpSites
+     * getAll
      *
      * @return mixed
      */
-    public function getAllWpSites(){
+    public function getAll(): mixed{
         return  WpSite::paginate(10);
-    }  
-
+    }
+    
     /**
-     * createWpSite
+     * create
      *
      * @param  array $data
      * @return WpSite
      */
-    public function createWpSite(array $data): WpSite{
+    public function create(array $data): WpSite {
         return WpSite::create($data);
+    }
+    
+    /**
+     * update
+     *
+     * @param  mixed $item
+     * @param  array $data
+     * @return void
+     */
+    public function update(mixed $item, array $data): void {
+      $item->update($data);
+    }
+    
+    /**
+     * delete
+     *
+     * @param  mixed $item
+     * @return void
+     */
+    public function delete(mixed $item): void{
+        $item->delete();
     }
 }

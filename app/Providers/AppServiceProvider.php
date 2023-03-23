@@ -2,11 +2,9 @@
 
 namespace App\Providers;
 
+use App\Interfaces\CrudInterface;
 use App\Interfaces\RoleRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
-use App\Interfaces\WpRoleRepositoryInterface;
-use App\Interfaces\WpSiteRepositoryInterface;
-use App\Interfaces\WpUserRepositoryInterface;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WpRoleRepository;
@@ -21,32 +19,30 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->registerUserRepo();
-        $this->registerRoleRepo();
-        $this->registerWpUserRepo();
-        $this->registerWpRoleRepo();
-        $this->registerWpSiteRepo();
-    }
+        $this->app->when(WpUserRepository::class)
+        ->needs(CrudInterface::class)
+        ->give(function () {
+            return new WpUserRepository();
+        });
+        $this->app->when(WpRoleRepository::class)
+        ->needs(CrudInterface::class)
+        ->give(function () {
+            return new WpRoleRepository();
+        });
+        $this->app->when(WpSiteRepository::class)
+        ->needs(CrudInterface::class)
+        ->give(function () {
+            return new WpSiteRepository();
+        });
+        $this->app->when(UserRepository::class)
+        ->needs(CrudInterface::class)
+        ->give(function () {
+            return new UserRepository();
+        });
 
-
-    public function registerUserRepo() {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-    }
 
-    public function registerWpUserRepo() {
-        $this->app->bind(WpUserRepositoryInterface::class, WpUserRepository::class);
-    }
-
-    public function registerRoleRepo() {
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
-    }
-
-    public function registerWpRoleRepo() {
-        $this->app->bind(WpRoleRepositoryInterface::class, WpRoleRepository::class);
-    }
-
-    public function registerWpSiteRepo() {
-        $this->app->bind(WpSiteRepositoryInterface::class, WpSiteRepository::class);
     }
 
     /**
