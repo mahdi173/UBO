@@ -29,21 +29,21 @@ class WpSiteRepository implements CrudInterface
     /**
      * update
      *
-     * @param  mixed $item
+     * @param  mixed $wpSite
      * @param  array $data
      * @return void
      */
-    public function update(mixed $item, array $data): void {
-      $item->update($data);
+    public function update(mixed $wpSite, array $data): void {
+      $wpSite->update($data);
     }
     
     /**
      * delete
      *
-     * @param  mixed $item
+     * @param  mixed $wpSite
      * @return void
      */
-    public function delete(mixed $item): void{
-        $item->delete();
+    public function delete(mixed $wpSite): void{
+        $wpSite->delete();
     }
 }

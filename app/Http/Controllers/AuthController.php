@@ -40,7 +40,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse|array
     {
-        return $this->userService->createUserToken($request["email"], $request["password"]);
+        return $this->userService->createUserToken($request->email, $request->password);
     }
     
     /**

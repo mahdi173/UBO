@@ -35,21 +35,21 @@ class WpUserRepository implements CrudInterface
     /**
      * update
      *
-     * @param  mixed $item
+     * @param  mixed $wpUser
      * @param  array $data
      * @return void
      */
-    public function update(mixed $item, array $data): void {
-      $item->update($data);
+    public function update(mixed $wpUser, array $data): void {
+      $wpUser->update($data);
     }
       
     /**
      * delete
      *
-     * @param  mixed $item
+     * @param  mixed $wpUser
      * @return void
      */
-    public function delete(mixed $item): void{
-        $item->delete();
+    public function delete(mixed $wpUser): void{
+        $wpUser->delete();
     }
 }

@@ -23,22 +23,22 @@ class UserRepository implements UserRepositoryInterface, CrudInterface
      * @param  array $data
      * @return User
      */
-    public function create(array $data, $roleId=null): User{
+    public function create(array $data): User{
         return User::create([
             'userName' => $data['userName'],
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'role_id'=> $roleId
+            'role_id'=> 1
         ]);
     }
 
-    public function update($item, array $data){
+    public function update(mixed $user, array $data){
         
     }
 
-    public function delete($item){
+    public function delete(mixed $user){
         
     }
     

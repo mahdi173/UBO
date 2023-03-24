@@ -30,9 +30,7 @@ class UserService
      */
     public function storeUser($data): JsonResponse
     {
-        $role= $this->roleRepository->getRoleByName("user");
-
-        $user = $this->userRepository->create($data, $role->id);
+        $user = $this->userRepository->create($data);
 
         return response()->json([
             'message' => 'User Created Successfully',
@@ -54,7 +52,7 @@ class UserService
         if (!$user || !Hash::check($password, $user->password)) {
             return response()->json([
                 'msg' => 'Incorrect email or password'
-            ], 400);
+            ], 422);
         }
 
         $token = $user->createToken('apiToken')->plainTextToken;

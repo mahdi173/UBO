@@ -30,21 +30,21 @@ class WpRoleRepository implements CrudInterface
     /**
      * update
      *
-     * @param  mixed $item
+     * @param  mixed $wpRole
      * @param  array $data
      * @return void
      */
-    public function update($item, array $data): void {
-      $item->update($data);
+    public function update(mixed $wpRole, array $data): void {
+      $wpRole->update($data);
     }
       
     /**
      * delete
      *
-     * @param  mixed $item
+     * @param  mixed $wpRole
      * @return void
      */
-    public function delete(mixed $item): void{
-        $item->delete();
+    public function delete(mixed $wpRole): void{
+        $wpRole->delete();
     }
 }
