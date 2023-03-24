@@ -29,7 +29,7 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {   
-      return $this->userService->storeUser($request);   
+      return $this->userService->storeUser($request->all());   
     }
     
     /**
@@ -40,7 +40,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse|array
     {
-        return $this->userService->checkCredentials($request["email"], $request["password"]);
+        return $this->userService->createUserToken($request->email, $request->password);
     }
     
     /**
@@ -57,5 +57,4 @@ class AuthController extends Controller
             'message' => 'user logged out'
         ], 200);
     }
-
 }

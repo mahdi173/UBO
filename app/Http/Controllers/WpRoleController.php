@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Filters\WpRoleFilters;
 use App\Http\Requests\StoreWpRoleRequest;
 use App\Models\WpRole;
 use App\Services\WpRoleService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class WpRoleController extends Controller
@@ -38,7 +39,7 @@ class WpRoleController extends Controller
      */
     public function store(StoreWpRoleRequest $request): JsonResponse
     {
-        return $this->wpRoleService->storeWpRole($request["name"]);
+        return $this->wpRoleService->storeWpRole($request->all());
     }
     
     /**

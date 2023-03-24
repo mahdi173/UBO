@@ -2,22 +2,19 @@
 
 namespace App\Services;
 
-use App\Interfaces\WpSiteRepositoryInterface;
 use App\Models\WpSite;
-use App\Traits\DeleteObjectTrait;
+use App\Repositories\WpSiteRepository;
 use Illuminate\Http\JsonResponse;
 
 class WpSiteService
-{ 
-    use DeleteObjectTrait;
-    
+{     
      /**
      * __construct
      *
-     * @param  WpSiteRepositoryInterface $wpSiteRepository
+     * @param  WpSiteRepository $wpSiteRepository
      * @return void
      */
-    public function __construct(private WpSiteRepositoryInterface $wpSiteRepository)
+    public function __construct(private WpSiteRepository $wpSiteRepository)
     {
     }
 
@@ -28,8 +25,7 @@ class WpSiteService
      */
     public function getAllWpSites(): JsonResponse
     {
-        $data =$this->wpSiteRepository->getAllWpSites();
- 
+        $data =$this->wpSiteRepository->getAll();
         return response()->json($data);
     }
     
@@ -41,8 +37,7 @@ class WpSiteService
      */
     public function storeWpSite(array $data): JsonResponse
     {
-        $wpSite= $this->wpSiteRepository->createWpSite($data);
-    
+        $wpSite= $this->wpSiteRepository->create($data);
         return response()->json($wpSite);
     }
     
@@ -55,7 +50,7 @@ class WpSiteService
      */
     public function updateWpSite(array $data, WpSite $wpSite): JsonResponse
     {
-        $wpSite->update($data);
+        $this->wpSiteRepository->update($wpSite, $data);
         return response()->json($wpSite, 200);
     }
     
@@ -67,6 +62,7 @@ class WpSiteService
      */
     public function deleteWpSite( WpSite $wpSite): JsonResponse
     {
-        return $this->deleteRecord($wpSite);
+        $this->wpSiteRepository->delete($wpSite);
+        return response()->json(["msg"=>"Item successfully deleted!"], 200);
     }
 }

@@ -2,26 +2,54 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\WpUserRepositoryInterface;
+use App\Interfaces\CrudInterface;
 use App\Models\WpUser;
 
-class WpUserRepository implements WpUserRepositoryInterface 
-{    
+class WpUserRepository implements CrudInterface 
+{        
     /**
-     * getAllWpUsers
+     * getAll
      *
      * @return mixed
      */
-    public function getAllWpUsers() {
+    public function getAll(): mixed{
         return WpUser::paginate(10);
-    }    
+    }
+    
     /**
-     * createWpUser
+     * create
      *
      * @param  array $data
      * @return WpUser
      */
-    public function createWpUser(array $data): WpUser{
-        return WpUser::create($data);
+    public function create(array $data): WpUser {
+        return WpUser::create([
+            'userName' => $data['userName'],
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+    
+    /**
+     * update
+     *
+     * @param  mixed $wpUser
+     * @param  array $data
+     * @return void
+     */
+    public function update(mixed $wpUser, array $data): void {
+      $wpUser->update($data);
+    }
+      
+    /**
+     * delete
+     *
+     * @param  mixed $wpUser
+     * @return void
+     */
+    public function delete(mixed $wpUser): void{
+        $wpUser->delete();
     }
 }

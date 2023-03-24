@@ -6,6 +6,7 @@ use App\Filters\WpUserFilters;
 use App\Http\Requests\RegisterRequest;
 use App\Models\WpUser;
 use App\Services\WpUserService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class WpUserController extends Controller

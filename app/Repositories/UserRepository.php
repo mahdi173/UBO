@@ -2,28 +2,44 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\CrudInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 
-class UserRepository implements UserRepositoryInterface 
+class UserRepository implements UserRepositoryInterface, CrudInterface 
 {    
     /**
-     * getAllUsers
+     * getAll
      *
      * @return mixed
      */
-    public function getAllUsers(){
+    public function getAll(){
         return User::paginate(10);
     }
     
     /**
-     * createUser
+     * create
      *
      * @param  array $data
      * @return User
      */
-    public function createUser(array $data): User{
-        return User::create($data);
+    public function create(array $data): User{
+        return User::create([
+            'userName' => $data['userName'],
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role_id'=> 1
+        ]);
+    }
+
+    public function update(mixed $user, array $data){
+        
+    }
+
+    public function delete(mixed $user){
+        
     }
     
     /**
@@ -32,18 +48,8 @@ class UserRepository implements UserRepositoryInterface
      * @param  string $email
      * @return User
      */
-    public function getUserByEmail(string $email): User{
+    public function getUserByEmail(string $email): User|null {
         return  User::where('email', $email)->first();
-    }
-    
-    /**
-     * getUserById
-     *
-     * @param  int $userId
-     * @return User
-     */
-    public function getUserById (int $userId): User{
-        return User::findOrFail($userId);
     }
 }
    

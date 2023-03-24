@@ -2,23 +2,19 @@
 
 namespace App\Services;
 
-use App\Interfaces\WpRoleRepositoryInterface;
 use App\Models\WpRole;
-use App\Traits\DeleteObjectTrait;
+use App\Repositories\WpRoleRepository;
 use Illuminate\Http\JsonResponse;
 
 class WpRoleService
-{ 
-    use DeleteObjectTrait;
-    
+{     
     /**
      * __construct
      *
-     * @param  mixed $userRepository
-     * @param  mixed $roleRepository
+     * @param  WpRoleRepository $roleRepository
      * @return void
      */
-    public function __construct(private WpRoleRepositoryInterface $wpRoleRepository)
+    public function __construct(private WpRoleRepository $roleRepository)
     {
     }
 
@@ -28,19 +24,18 @@ class WpRoleService
      * @return JsonResponse
      */
     public function getAllWpRoles(): JsonResponse{
-        return response()->json($this->wpRoleRepository->getAllWpRoles());
+        return response()->json($this->roleRepository->getAll());
     }
     
     /**
      * storeWpRole
      *
-     * @param  string $roleName
+     * @param  array $data
      * @return JsonResponse
      */
-    public function storeWpRole(string $roleName): JsonResponse 
+    public function storeWpRole(array $data): JsonResponse 
     {
-        $wpRole= $this->wpRoleRepository->createWpRole($roleName);
-
+        $wpRole= $this->roleRepository->create($data);
         return response()->json($wpRole);
     }
     
@@ -53,7 +48,7 @@ class WpRoleService
      */
     public function updateWpRole(array $data, WpRole $wpRole): JsonResponse
     {
-        $wpRole->update($data);
+        $this->roleRepository->update($wpRole, $data);
         return response()->json($wpRole, 200);
     }
     
@@ -65,6 +60,7 @@ class WpRoleService
      */
     public function deleteWpRole( WpRole $wpRole): JsonResponse
     {
-        return $this->deleteRecord($wpRole);
+        $this->roleRepository->delete($wpRole);
+        return response()->json(["msg"=>"Item successfully deleted!"], 200);
     }
 }
