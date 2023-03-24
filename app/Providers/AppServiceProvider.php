@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-<<<<<<< HEAD
         $this->app->when(WpUserRepository::class)
         ->needs(CrudInterface::class)
         ->give(function () {
@@ -52,8 +51,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
 
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
-=======
->>>>>>> main
+        
         $this->app->when(PoleController::class)
         ->needs(RepositoryInterface::class)
         ->give(function () {
