@@ -23,7 +23,7 @@ class Type extends Model
     {
         return $this->morphMany(Log::class, 'loggable');
     }
-    public function scopeFilter($query, array $filters){
+    public function scopeFilter($query, array $filters ,$sortBy = 'id', $sortDirection = 'asc'){
         if($filters['name']  ?? false){
             $query
                 ->where('name', 'like', '%' . trim($filters['name']) . '%');
@@ -44,5 +44,6 @@ class Type extends Model
             $query
                 ->where('deleted_at', 'like', '%' . trim($filters['deletedat']). '%');
         }
+        $query->orderBy($sortBy, $sortDirection);
     }
 }
