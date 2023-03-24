@@ -18,21 +18,9 @@ class WpUser extends Model
      * @var array
      */
     protected $fillable = [
-<<<<<<< HEAD
-<<<<<<< HEAD
-        'userName',
-        'firstName',
-        'lastName',
-=======
         'username',
         'firstname',
         'lastname',
->>>>>>> 9853fe6 ([tr - wpk-training/2345] Media - Pre Embauche - PFE 2023 - UBO - Réalisation - Back - CRUD (pole,role,type)+filter)
-=======
-        'username',
-        'firstname',
-        'lastname',
->>>>>>> main
         'email',
         'password'
     ];

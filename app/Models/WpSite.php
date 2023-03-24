@@ -19,14 +19,8 @@ class WpSite extends Model
     protected $fillable = [
         'name',
         'domain',
-<<<<<<< HEAD
         'pole_id',
         'type_id'
-=======
-    
-       
-
->>>>>>> main
     ];
     
     /**

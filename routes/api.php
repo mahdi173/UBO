@@ -65,8 +65,4 @@ Route::prefix('/role')-> group (function () {
     Route::post('/add',[RoleController::class ,'store']);
     Route::put('/update/{id}', [RoleController::class ,'update']);
     Route::delete('/delete/{id}', [RoleController::class ,'destroy']);
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> main
