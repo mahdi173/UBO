@@ -80,13 +80,22 @@ class TypeService implements RepositoryInterface{
      */
     public function searchBy(Request $request){
         // return Type::where('name', 'like', '%' . $name . '%')->get();
+<<<<<<< HEAD
         $data=Type::latest()->filter([
+=======
+        $data=Type::filter([
+>>>>>>> main
          'name'=>$request->name,
          'id'=>$request->id,
          'createdat'=>$request->createdat,
          'updatedat'=>$request->updatedat,
          'deletedat'=>$request->updatedat,
+<<<<<<< HEAD
          ])->paginate(10);
+=======
+        ],
+        $request->input('sortby', 'id'), $request->input('sortdirection', 'asc'))->paginate(10);
+>>>>>>> main
      
      return response()->json($data);
      }

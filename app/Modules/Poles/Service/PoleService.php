@@ -72,13 +72,22 @@ class PoleService implements RepositoryInterface{
 
     public function searchBy(Request $request){
        // return Pole::where('name', 'like', '%' . $name . '%')->get();
+<<<<<<< HEAD
        $data=Pole::latest()->filter([
+=======
+       $data=Pole::filter([
+>>>>>>> main
         'name'=>$request->name,
         'id'=>$request->id,
         'createdat'=>$request->createdat,
         'updatedat'=>$request->updatedat,
         'deletedat'=>$request->updatedat,
+<<<<<<< HEAD
         ])->paginate(10);
+=======
+       ],
+        $request->input('sortby', 'id'), $request->input('sortdirection', 'asc'))->paginate(10);
+>>>>>>> main
     
     return response()->json($data);
     }

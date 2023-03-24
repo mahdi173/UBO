@@ -40,7 +40,11 @@ class Role extends Model
     }
 
     
+<<<<<<< HEAD
     public function scopeFilter($query, array $filters){
+=======
+    public function scopeFilter($query, array $filters, $sortBy = 'id', $sortDirection = 'asc'){
+>>>>>>> main
         if($filters['name']  ?? false){
             $query
                 ->where('name', 'like', '%' . trim($filters['name']) . '%');
@@ -61,5 +65,9 @@ class Role extends Model
             $query
                 ->where('deleted_at', 'like', '%' . trim($filters['deletedat']). '%');
         }
+<<<<<<< HEAD
+=======
+        $query->orderBy($sortBy, $sortDirection);
+>>>>>>> main
     }
 }
