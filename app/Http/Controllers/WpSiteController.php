@@ -26,9 +26,9 @@ class WpSiteController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(WpSiteFilters $filters): JsonResponse
     {
-        return  $this->wpSiteService->getAllWpSites();
+       return $this->wpSiteService->filter($filters);
     }
      
     /**

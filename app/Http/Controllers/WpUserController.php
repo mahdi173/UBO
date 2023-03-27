@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Filters\WpUserFilters;
 use App\Http\Requests\RegisterRequest;
 use App\Models\WpUser;
+use App\Models\WpUserSiteRole;
 use App\Services\WpUserService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -26,9 +27,9 @@ class WpUserController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(WpUserFilters $filters): JsonResponse
     {
-        return $this->wpUserService->getAllWpUsers();
+        return $this->wpUserService->filter($filters);
     }
     
     /**

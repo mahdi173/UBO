@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Filters\WpSiteFilters;
 use App\Models\WpSite;
 use App\Repositories\WpSiteRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class WpSiteService
@@ -16,17 +18,6 @@ class WpSiteService
      */
     public function __construct(private WpSiteRepository $wpSiteRepository)
     {
-    }
-
-    /**
-     * getAllWpSites
-     *
-     * @return JsonResponse
-     */
-    public function getAllWpSites(): JsonResponse
-    {
-        $data =$this->wpSiteRepository->getAll();
-        return response()->json($data);
     }
     
     /**
@@ -64,5 +55,30 @@ class WpSiteService
     {
         $this->wpSiteRepository->delete($wpSite);
         return response()->json(["msg"=>"Item successfully deleted!"], 200);
+    }
+    
+    /**
+     * filter
+     *
+     * @param  WpSiteFilters $filters
+     * @return JsonResponse
+     */
+    public function filter(WpSiteFilters $filters): JsonResponse
+    {
+        $results= WpSite::filter($filters);
+
+        if(!$results){
+            return response()->json(["msg"=>"Invalid query params!"], 422);
+        }
+
+        if($results instanceof Builder){
+            if(!empty($results->get()->toArray()) ){
+                return  response()->json(["data"=> $results->get()]);
+            }
+        }else if(!empty($results->toArray()["data"])){
+            return response()->json($results);
+        }
+        
+        return response()->json(["msg"=>"No results!"]);
     }
 }

@@ -26,9 +26,9 @@ class WpRoleController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(WpRoleFilters $filters): JsonResponse
     {
-        return $this->wpRoleService->getAllWpRoles();
+      return $this->wpRoleService->filter($filters);
     }
     
     /**

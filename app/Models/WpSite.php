@@ -51,6 +51,24 @@ class WpSite extends Model
     }
     
     /**
+     * roles
+     *
+     * @return void
+     */
+    public function roles() {
+        return $this->belongsToMany(WpRole::class, 'wp_user_site_roles');
+    }
+    
+    /**
+     * users
+     *
+     * @return void
+     */
+    public function users() {
+        return $this->belongsToMany(WpUser::class, 'wp_user_site_roles');
+    }
+    
+    /**
      * logs
      *
      * @return MorphMany
@@ -58,5 +76,10 @@ class WpSite extends Model
     public function logs(): MorphMany
     {
         return $this->morphMany(Log::class, 'loggable');
+    }
+
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
     }
 }

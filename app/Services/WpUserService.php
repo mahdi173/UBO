@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Interfaces\CrudInterface;
+use App\Filters\WpUserFilters;
 use App\Models\WpUser;
 use App\Repositories\WpUserRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class WpUserService
@@ -17,17 +18,6 @@ class WpUserService
      */
     public function __construct(private WpUserRepository $wpUserRepository)
     {
-    }
-
-    /**
-     * getAllWpUsers
-     *
-     * @return JsonResponse
-     */
-    public function getAllWpUsers(): JsonResponse
-    {
-        $data= $this->wpUserRepository->getAll();
-        return response()->json($data);
     }
     
     /**
@@ -65,5 +55,30 @@ class WpUserService
     {
         $this->wpUserRepository->delete($wpUser);
         return response()->json(["msg"=>"Item successfully deleted!"], 200);
+    }
+    
+    /**
+     * filter
+     *
+     * @param  WpUserFilters $filters
+     * @return JsonResponse
+     */
+    public function filter(WpUserFilters $filters): JsonResponse
+    {
+        $results= WpUser::filter($filters);
+
+        if(!$results){
+            return response()->json(["msg"=>"Invalid query params!"], 422);
+        }
+
+        if($results instanceof Builder){
+            if(!empty($results->get()->toArray()) ){
+                return  response()->json(["data"=> $results->get()]);
+            }
+        }else if(!empty($results->toArray()["data"])){
+            return response()->json($results);
+        }
+        
+        return response()->json(["msg"=>"No results!"]);
     }
 }
