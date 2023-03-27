@@ -18,9 +18,9 @@ class WpUser extends Model
      * @var array
      */
     protected $fillable = [
-        'userName',
-        'firstName',
-        'lastName',
+        'username',
+        'firstname',
+        'lastname',
         'email',
         'password'
     ];
