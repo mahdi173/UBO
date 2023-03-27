@@ -7,9 +7,17 @@ use App\Models\WpRole;
 use App\Repositories\WpRoleRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpRoleService
 {     
+    protected $filters = [
+        'id',
+        'name',
+        'created_at',
+        'updated_at'
+    ];
+
     /**
      * __construct
      *
@@ -60,15 +68,34 @@ class WpRoleService
      /**
      * filter
      *
-     * @param  WpRoleFilters $filters
+     * @param  Request $request
      * @return JsonResponse
      */
-    public function filter(WpRoleFilters $filters): JsonResponse
+    public function filter(Request $request): JsonResponse
     {
-        $results= WpRole::filter($filters);
+        $queryFilters= $request->only($this->filters);
+        
+        if($request->sort && $request->order){
+            $sortValues= explode(',', $request->sort);
+            $orderValues= explode(',', $request->order);
+            
+            foreach($sortValues as $key=>$item){
+                if(!in_array($item, $this->filters)){
+                    $sortValues=null;
+                }
+            }       
 
-        if(!$results){
-            return response()->json(["msg"=>"Invalid query params!"], 422);
+            if($sortValues){
+                foreach($orderValues as $key=>$item){
+                    if($item!="asc" && $item!="desc"){
+                        $orderValues[$key]="asc";
+                    }
+                }
+
+                $results= WpRole::filter($queryFilters, $request->paginate, $sortValues, $orderValues);
+            }            
+        }else{
+            $results= WpRole::filter($queryFilters, $request->paginate);
         }
 
         if($results instanceof Builder){
@@ -78,7 +105,7 @@ class WpRoleService
         }else if(!empty($results->toArray()["data"])){
             return response()->json($results);
         }
-        
-        return response()->json(["msg"=>"No results!"]);
+
+        return response()->json(["msg"=> "No Results"], 404);
     }
 }

@@ -78,8 +78,38 @@ class WpSite extends Model
         return $this->morphMany(Log::class, 'loggable');
     }
 
-    public function scopeFilter($query, $filters)
+    public function scopeFilter($query, $filters, $paginate,  array|string $sorts="id", array|string $orders="asc")
     {
-        return $filters->apply($query);
+        foreach ($filters as $filter => $value) {
+            if($filter=="pole" || $filter=="type")
+            {
+                $query= $query->whereHas($filter, function ($query) use ($value) {
+                    $query->where('name', 'LIKE', '%'.$value.'%');
+                });
+            }else{
+                $query= $query->where($filter, 'LIKE', '%'. $value.'%');
+            }
+        }
+
+        if(is_array($sorts)){
+            for($i=0; $i<sizeof($sorts); $i++){
+                if($sorts[$i]=="pole"){
+                    $query= $query->orderBy("pole_id", $orders[$i]);
+                }else if($sorts[$i]=="type"){
+                    $query= $query->orderBy("type_id", $orders[$i]);
+                }else{
+                    $query= $query->orderBy($sorts[$i], $orders[$i]);
+                }                
+            }
+        }else{
+            $query= $query->orderBy($sorts, $orders);
+        }
+
+
+        if($paginate){
+            $query=  $query->paginate($paginate);
+        }
+
+        return $query;
     }
 }

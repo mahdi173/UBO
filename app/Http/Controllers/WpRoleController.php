@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\WpRoleFilters;
 use App\Http\Requests\StoreWpRoleRequest;
 use App\Models\WpRole;
 use App\Services\WpRoleService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpRoleController extends Controller
 {
@@ -26,9 +25,9 @@ class WpRoleController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(WpRoleFilters $filters): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-      return $this->wpRoleService->filter($filters);
+      return $this->wpRoleService->filter($request);
     }
     
     /**

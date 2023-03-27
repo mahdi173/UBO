@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\WpSiteFilters;
 use App\Http\Requests\StoreWpSiteRequest;
 use App\Models\WpSite;
 use App\Services\WpSiteService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpSiteController extends Controller
 {
@@ -26,9 +25,9 @@ class WpSiteController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(WpSiteFilters $filters): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-       return $this->wpSiteService->filter($filters);
+       return $this->wpSiteService->filter($request);
     }
      
     /**

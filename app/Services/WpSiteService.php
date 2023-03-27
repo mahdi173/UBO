@@ -7,9 +7,20 @@ use App\Models\WpSite;
 use App\Repositories\WpSiteRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpSiteService
-{     
+{   
+    protected $filters = [
+        'id',
+        'name',
+        'domain',
+        'pole',
+        'type',
+        'created_at',
+        'updated_at',
+    ];
+
      /**
      * __construct
      *
@@ -60,16 +71,36 @@ class WpSiteService
     /**
      * filter
      *
-     * @param  WpSiteFilters $filters
+     * @param  Request $request
      * @return JsonResponse
      */
-    public function filter(WpSiteFilters $filters): JsonResponse
+    public function filter(Request $request): JsonResponse
     {
-        $results= WpSite::filter($filters);
+        $queryFilters= $request->only($this->filters);
+        
+        if($request->sort && $request->order){ 
+            $sortValues= explode(',', $request->sort);
+            $orderValues= explode(',', $request->order);
+            
+            foreach($sortValues as $key=>$item){
+                if(!in_array($item, $this->filters)){
+                    $sortValues=null;
+                }
+            }       
 
-        if(!$results){
-            return response()->json(["msg"=>"Invalid query params!"], 422);
+            if($sortValues){
+                foreach($orderValues as $key=>$item){
+                    if($item!="asc" && $item!="desc"){
+                        $orderValues[$key]="asc";
+                    }
+                }
+
+                $results= WpSite::filter($queryFilters, $request->paginate, $sortValues, $orderValues);
+            }            
+        }else{
+            $results= WpSite::filter($queryFilters, $request->paginate);
         }
+
 
         if($results instanceof Builder){
             if(!empty($results->get()->toArray()) ){
@@ -78,7 +109,7 @@ class WpSiteService
         }else if(!empty($results->toArray()["data"])){
             return response()->json($results);
         }
-        
-        return response()->json(["msg"=>"No results!"]);
+
+        return response()->json(["msg"=> "No Results"], 404);
     }
 }

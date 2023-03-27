@@ -57,8 +57,24 @@ class WpRole extends Model
         return $this->morphMany(Log::class, 'loggable');
     }
 
-    public function scopeFilter($query, $filters)
+    public function scopeFilter($query, $filters, $paginate, array|string $sorts="id", array|string $orders="asc")
     {
-        return $filters->apply($query);
+        foreach ($filters as $filter => $value) {
+            $query= $query->where($filter, 'LIKE', '%'. $value.'%');
+        }
+
+        if(is_array($sorts)){
+            for($i=0; $i<sizeof($sorts); $i++){
+                $query= $query->orderBy($sorts[$i], $orders[$i]);
+            }
+        }else{
+            $query= $query->orderBy($sorts, $orders);
+        }
+
+        if($paginate){
+            $query=  $query->paginate($paginate);
+        }
+
+        return $query;
     }
 }
