@@ -78,18 +78,12 @@ class RoleService implements RepositoryInterface{
      * @return void
      */
     public function searchBy(Request $request){
-        // return Role::where('name', 'like', '%' . $name . '%')->get();
-        $data=Role::filter([
-         'name'=>$request->name,
-         'id'=>$request->id,
-         'createdat'=>$request->createdat,
-         'updatedat'=>$request->updatedat,
-         'deletedat'=>$request->updatedat,
-        ],
-        $request->input('sortby', 'id'),
-        $request->input('sortdirection', 'asc'))
-        ->paginate(10);
-        //comment
+  
+        $data=Role::filters(
+         
+         $request->input('filters'),
+         $request->input('sort'))
+         ->paginate(10);
      
      return response()->json($data);
      }

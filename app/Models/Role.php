@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends Model
 {
@@ -40,27 +42,68 @@ class Role extends Model
     }
 
     
-    public function scopeFilter($query, array $filters, $sortBy = 'id', $sortDirection = 'asc'){
-        if($filters['name']  ?? false){
-            $query
-                ->where('name', 'like', '%' . trim($filters['name']) . '%');
+       /**
+     * Method scopeFilters
+     *
+     * @param Builder $query 
+     * @param ?array $filter
+     * @param ?array $sort
+     *
+     * @return void
+     */
+    public function scopeFilters(
+        Builder $query,
+        ?array $filters,
+        ?array $sort
+    ):void {
+        
+        // Check if the filter is an array
+        if(is_array($filters))
+        {
+             // Run the query based on the field and value
+             foreach ($filters as $field => $searchFor) {
+                switch ($field) {
+                    case 'name':
+                        $query->where(DB::raw('upper(name)'),'like','%'.strtoupper($searchFor).'%');
+                        break;
+                    case 'domain':
+                        $query->where(DB::raw('upper(domain)'),'like','%'.strtoupper($searchFor).'%');
+                        break;
+                    case 'created_at':
+                        $query->where('created_at', $searchFor);
+                        break;
+                    case 'updated_at':
+                        $query->where('updated_at', $searchFor);
+                        break;
+                    default:
+                        $query;
+                        break;
+                }
+               
+            }
+
         }
-        if($filters['id']  ?? false){
-            $query
-                ->where('id', 'like', '%' . trim($filters['id']) . '%');
+    
+        // Check if the sort is an array
+        if(is_array($sort)) {
+
+            // Get key and value
+            $field = key($sort);
+            $direction = reset($sort);
+            // Run the query based on the field and value 
+            // Default return $query without orderBy clause
+            $query->when(
+                $field,
+                static function (Builder $query, $field) use ($direction): void {
+                   match($field) {
+                       'name' => $query->orderBy($field , !empty($direction) ? $direction : 'ASC'),
+                       'domain' => $query->orderBy($field ,!empty($direction) ? $direction : 'ASC'),
+                       'created_at' => $query->orderBy($field , !empty($direction) ? $direction : 'ASC'),
+                       'updated_at' => $query->orderBy($field , !empty($direction) ? $direction : 'ASC'),
+                       default => $query,
+                   };
+               }
+           );
         }
-        if($filters['createdat']  ?? false){
-            $query
-                ->where('created_at', 'like', '%' . trim($filters['createdat']). '%');
-        }
-        if($filters['updatedat']  ?? false){
-            $query
-                ->where('updated_at', 'like', '%' . trim($filters['updatedat']). '%');
-        }
-        if($filters['deletedat']  ?? false){
-            $query
-                ->where('deleted_at', 'like', '%' . trim($filters['deletedat']). '%');
-        }
-        $query->orderBy($sortBy, $sortDirection);
     }
 }

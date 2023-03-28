@@ -70,17 +70,27 @@ class PoleService implements RepositoryInterface{
         );
     }
 
-    public function searchBy(Request $request){
-       // return Pole::where('name', 'like', '%' . $name . '%')->get();
-       $data=Pole::filter([
-        'name'=>$request->name,
-        'id'=>$request->id,
-        'createdat'=>$request->createdat,
-        'updatedat'=>$request->updatedat,
-        'deletedat'=>$request->updatedat,
-       ],
-        $request->input('sortby', 'id'), $request->input('sortdirection', 'asc'))->paginate(10);
+    // public function searchBy(Request $request){
+    //    // return Pole::where('name', 'like', '%' . $name . '%')->get();
+    //    $data=Pole::filter([
+    //     'name'=>$request->name,
+    //     'id'=>$request->id,
+    //     'createdat'=>$request->createdat,
+    //     'updatedat'=>$request->updatedat,
+    //     'deletedat'=>$request->updatedat,
+    //    ],
+    //     $request->input('sortby', 'id'), $request->input('sortdirection', 'asc'))->paginate(10);
     
-    return response()->json($data);
-    }
+    // return response()->json($data);
+    // }
+    public function searchBy(Request $request){
+  
+        $data=Pole::filters(
+         
+         $request->input('filters'),
+         $request->input('sort'))
+         ->paginate(10);
+     
+     return response()->json($data);
+     }
 }
