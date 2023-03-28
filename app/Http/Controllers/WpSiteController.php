@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWpSiteRequest;
+use App\Http\Requests\UpdateWpSiteRequest;
 use App\Models\WpSite;
 use App\Services\WpSiteService;
 use Illuminate\Http\JsonResponse;
@@ -58,7 +59,7 @@ class WpSiteController extends Controller
      * @param  WpSite $wpSite
      * @return JsonResponse
      */
-    public function update(StoreWpSiteRequest $request, WpSite $wpSite): JsonResponse
+    public function update(UpdateWpSiteRequest $request, WpSite $wpSite): JsonResponse
     {
         return  $this->wpSiteService->updateWpSite($request->all(), $wpSite);
     }

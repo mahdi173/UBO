@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreWpUserRequest;
+use App\Http\Requests\UpdateWpUserRequest;
 use App\Models\WpUser;
 use App\Services\WpUserService;
 use Illuminate\Http\JsonResponse;
@@ -33,10 +35,10 @@ class WpUserController extends Controller
     /**
      * store
      *
-     * @param  RegisterRequest $request
+     * @param  StoreWpUserRequest $request
      * @return JsonResponse
      */
-    public function store(RegisterRequest $request): JsonResponse
+    public function store(StoreWpUserRequest $request): JsonResponse
     {
         return  $this->wpUserService->storeWpUser($request->all());
     }
@@ -54,11 +56,11 @@ class WpUserController extends Controller
     /**
      * update
      *
-     * @param  RegisterRequest $request
+     * @param  UpdateWpUserRequest $request
      * @param  WpUser $wpUser
      * @return JsonResponse
      */
-    public function update(RegisterRequest $request, WpUser $wpUser): JsonResponse
+    public function update(UpdateWpUserRequest $request, WpUser $wpUser): JsonResponse
     { 
         return  $this->wpUserService->updateWpUser($request->all(), $wpUser);
     }

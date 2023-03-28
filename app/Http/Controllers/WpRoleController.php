@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWpRoleRequest;
+use App\Http\Requests\UpdateWpRoleRequest;
 use App\Models\WpRole;
 use App\Services\WpRoleService;
 use Illuminate\Http\JsonResponse;
@@ -54,11 +55,11 @@ class WpRoleController extends Controller
     /**
      * update
      *
-     * @param  StoreWpRoleRequest $request
+     * @param  UpdateWpRoleRequest $request
      * @param  WpRole $wpRole
      * @return JsonResponse
      */
-    public function update(StoreWpRoleRequest $request, WpRole $wpRole): JsonResponse
+    public function update(UpdateWpRoleRequest $request, WpRole $wpRole): JsonResponse
     {
         return $this->wpRoleService->updateWpRole($request->all(), $wpRole);
     }
