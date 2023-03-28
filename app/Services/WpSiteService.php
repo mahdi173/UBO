@@ -76,40 +76,12 @@ class WpSiteService
      */
     public function filter(Request $request): JsonResponse
     {
-        $queryFilters= $request->only($this->filters);
-        
-        if($request->sort && $request->order){ 
-            $sortValues= explode(',', $request->sort);
-            $orderValues= explode(',', $request->order);
-            
-            foreach($sortValues as $key=>$item){
-                if(!in_array($item, $this->filters)){
-                    $sortValues=null;
-                }
-            }       
+        $results= WpSite::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
 
-            if($sortValues){
-                foreach($orderValues as $key=>$item){
-                    if($item!="asc" && $item!="desc"){
-                        $orderValues[$key]="asc";
-                    }
-                }
-
-                $results= WpSite::filter($queryFilters, $request->paginate, $sortValues, $orderValues);
-            }            
-        }else{
-            $results= WpSite::filter($queryFilters, $request->paginate);
-        }
-
-
-        if($results instanceof Builder){
-            if(!empty($results->get()->toArray()) ){
-                return  response()->json(["data"=> $results->get()]);
-            }
+        if(!$request->paginate){
+            return  response()->json(["data"=> $results->get()]);
         }else if(!empty($results->toArray()["data"])){
             return response()->json($results);
         }
-
-        return response()->json(["msg"=> "No Results"], 404);
     }
 }
