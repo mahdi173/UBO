@@ -7,7 +7,6 @@ use App\Http\Controllers\TypeController;
 
 
 
-Route::get('typeBy',[TypeController::class,'searchBy']);
 Route::get('types',[TypeController::class,'index']);
 Route::prefix('/type')-> group (function () {
     Route::post('/add',[TypeController::class ,'store']);

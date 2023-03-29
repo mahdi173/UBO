@@ -41,8 +41,8 @@ class Pole extends Model
     public function scopeFilters(
         Builder $query,
         ?array $filters,
-        ?array $sort
-        ,$paginate
+        ?array $sort,
+        $paginate
     ) {
         
         // Check if the filter is an array
