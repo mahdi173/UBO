@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Filters\WpRoleFilters;
 use App\Models\WpRole;
 use App\Repositories\WpRoleRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpRoleService
 {     
@@ -18,15 +21,6 @@ class WpRoleService
     {
     }
 
-    /**
-     * getAllWpRoles
-     *
-     * @return JsonResponse
-     */
-    public function getAllWpRoles(): JsonResponse{
-        return response()->json($this->roleRepository->getAll());
-    }
-    
     /**
      * storeWpRole
      *
@@ -62,5 +56,22 @@ class WpRoleService
     {
         $this->roleRepository->delete($wpRole);
         return response()->json(["msg"=>"Item successfully deleted!"], 200);
+    }
+
+     /**
+     * filter
+     *
+     * @param  Request $request
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        $results= WpRole::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
+
+        if(!$request->paginate){
+            return  response()->json(["data"=> $results->get()]);
+        }else if(!empty($results->toArray()["data"])){
+            return response()->json($results);
+        }
     }
 }

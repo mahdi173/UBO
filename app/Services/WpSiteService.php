@@ -2,12 +2,25 @@
 
 namespace App\Services;
 
+use App\Filters\WpSiteFilters;
 use App\Models\WpSite;
 use App\Repositories\WpSiteRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpSiteService
-{     
+{   
+    protected $filters = [
+        'id',
+        'name',
+        'domain',
+        'pole',
+        'type',
+        'created_at',
+        'updated_at',
+    ];
+
      /**
      * __construct
      *
@@ -16,17 +29,6 @@ class WpSiteService
      */
     public function __construct(private WpSiteRepository $wpSiteRepository)
     {
-    }
-
-    /**
-     * getAllWpSites
-     *
-     * @return JsonResponse
-     */
-    public function getAllWpSites(): JsonResponse
-    {
-        $data =$this->wpSiteRepository->getAll();
-        return response()->json($data);
     }
     
     /**
@@ -64,5 +66,22 @@ class WpSiteService
     {
         $this->wpSiteRepository->delete($wpSite);
         return response()->json(["msg"=>"Item successfully deleted!"], 200);
+    }
+    
+    /**
+     * filter
+     *
+     * @param  Request $request
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        $results= WpSite::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
+
+        if(!$request->paginate){
+            return  response()->json(["data"=> $results->get()]);
+        }else if(!empty($results->toArray()["data"])){
+            return response()->json($results);
+        }
     }
 }

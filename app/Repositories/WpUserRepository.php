@@ -28,7 +28,7 @@ class WpUserRepository implements CrudInterface
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt("123456789"),
         ]);
     }
     

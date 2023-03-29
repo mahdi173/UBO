@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\WpUserFilters;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreWpUserRequest;
+use App\Http\Requests\UpdateWpUserRequest;
 use App\Models\WpUser;
 use App\Services\WpUserService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpUserController extends Controller
 {
@@ -26,18 +27,18 @@ class WpUserController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return $this->wpUserService->getAllWpUsers();
+        return $this->wpUserService->filter($request);
     }
     
     /**
      * store
      *
-     * @param  RegisterRequest $request
+     * @param  StoreWpUserRequest $request
      * @return JsonResponse
      */
-    public function store(RegisterRequest $request): JsonResponse
+    public function store(StoreWpUserRequest $request): JsonResponse
     {
         return  $this->wpUserService->storeWpUser($request->all());
     }
@@ -55,11 +56,11 @@ class WpUserController extends Controller
     /**
      * update
      *
-     * @param  RegisterRequest $request
+     * @param  UpdateWpUserRequest $request
      * @param  WpUser $wpUser
      * @return JsonResponse
      */
-    public function update(RegisterRequest $request, WpUser $wpUser): JsonResponse
+    public function update(UpdateWpUserRequest $request, WpUser $wpUser): JsonResponse
     { 
         return  $this->wpUserService->updateWpUser($request->all(), $wpUser);
     }

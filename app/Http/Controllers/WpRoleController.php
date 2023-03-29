@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\WpRoleFilters;
 use App\Http\Requests\StoreWpRoleRequest;
+use App\Http\Requests\UpdateWpRoleRequest;
 use App\Models\WpRole;
 use App\Services\WpRoleService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class WpRoleController extends Controller
 {
@@ -26,9 +26,9 @@ class WpRoleController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return $this->wpRoleService->getAllWpRoles();
+      return $this->wpRoleService->filter($request);
     }
     
     /**
@@ -55,11 +55,11 @@ class WpRoleController extends Controller
     /**
      * update
      *
-     * @param  StoreWpRoleRequest $request
+     * @param  UpdateWpRoleRequest $request
      * @param  WpRole $wpRole
      * @return JsonResponse
      */
-    public function update(StoreWpRoleRequest $request, WpRole $wpRole): JsonResponse
+    public function update(UpdateWpRoleRequest $request, WpRole $wpRole): JsonResponse
     {
         return $this->wpRoleService->updateWpRole($request->all(), $wpRole);
     }
