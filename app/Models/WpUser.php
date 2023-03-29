@@ -89,10 +89,10 @@ class WpUser extends Model
                         break;
                     case 'lastName':
                         $query->where(DB::raw('lower(lastName)'), 'like', '%'.strtolower($value).'%');
-                    case 'email':
                         break;
-                    $query->where(DB::raw('lower(email)'), 'like', '%'.strtolower($value).'%');
-                    break;
+                    case 'email':
+                        $query->where(DB::raw('lower(email)'), 'like', '%'.strtolower($value).'%');
+                        break;
                     case 'created_at':
                         $query->where('created_at', 'like', '%'.$value.'%');
                         break;
