@@ -19,22 +19,15 @@ class TypeController extends Controller
     {
        
     }    
+      
+      
     /**
      * index
      *
+     * @param  mixed $request
      * @return void
      */
-    public function index()
-    {
-        return $this->repository->getAll();
-    }    
-    /**
-     * SearchByName
-     *
-     * @param  mixed $name
-     * @return void
-     */
-    public function searchBy(Request $request){
+    public function index(Request $request){
         return $this->repository->searchBy($request);
     }
 

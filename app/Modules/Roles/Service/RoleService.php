@@ -82,10 +82,13 @@ class RoleService implements RepositoryInterface{
         $data=Role::filters(
          
          $request->input('filters'),
-         $request->input('sort'))
-         ->paginate(10);
-     
-     return response()->json($data);
+         $request->input('sort'),
+         $request->paginate);
+         if(!$request->paginate){
+             return  response()->json(["data"=> $data->get()]);
+         }else{
+             return response()->json($data);
+         }
      }
 
 

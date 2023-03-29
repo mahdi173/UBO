@@ -53,8 +53,9 @@ class Type extends Model
     public function scopeFilters(
         Builder $query,
         ?array $filters,
-        ?array $sort
-    ):void {
+        ?array $sort,
+        $paginate
+    ){
         
         // Check if the filter is an array
         if(is_array($filters))
@@ -104,5 +105,9 @@ class Type extends Model
                }
            );
         }
+        if($paginate){
+            $query= $query->paginate($paginate);
+            }
+        return $query;
     }
 }

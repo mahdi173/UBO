@@ -6,8 +6,8 @@ use App\Http\Controllers\PoleController;
 
 
 
+
 Route::get('poles',[PoleController::class,'index']);
-Route::get('polesBy',[PoleController::class,'SearchByName']);
 Route::prefix('/pole')-> group (function () {
     Route::post('/add',[PoleController::class ,'store']);
     Route::put('/update/{id}', [PoleController::class ,'update']);
