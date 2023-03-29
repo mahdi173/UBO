@@ -70,7 +70,7 @@ class WpRoleService
 
         if(!$request->paginate){
             return  response()->json(["data"=> $results->get()]);
-        }else if(!empty($results->toArray()["data"])){
+        }else{
             return response()->json($results);
         }
     }
