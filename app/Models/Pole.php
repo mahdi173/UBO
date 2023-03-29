@@ -42,7 +42,8 @@ class Pole extends Model
         Builder $query,
         ?array $filters,
         ?array $sort
-    ):void {
+        ,$paginate
+    ) {
         
         // Check if the filter is an array
         if(is_array($filters))
@@ -92,5 +93,10 @@ class Pole extends Model
                }
            );
         }
+        if($paginate){
+        $query= $query->paginate($paginate);
+        }
+    return $query;
     }
+
 }

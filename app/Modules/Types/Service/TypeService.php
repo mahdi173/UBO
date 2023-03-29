@@ -81,13 +81,15 @@ class TypeService implements RepositoryInterface{
     public function searchBy(Request $request){
   
         $data=Type::filters(
-         
-         $request->input('filters'),
-         $request->input('sort'))
-         ->paginate(10);
-     
-     return response()->json($data);
+            $request->input('filters'),
+            $request->input('sort'),
+            $request->paginate);
+            if(!$request->paginate){
+                return  response()->json(["data"=> $data->get()]);
+            }else{
+                return response()->json($data);
+            }
+        }
      }
 
 
-}

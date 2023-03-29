@@ -34,35 +34,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 // Routes des Poles 
-//require __DIR__. "/App/Modules/Poles/routes/poleRoutes.php";
-
-
-Route::resource('poles', PoleController::class);
-Route::get('poles',[PoleController::class,'index']);
-Route::get('polesBy',[PoleController::class,'searchBy']);
-Route::prefix('/pole')-> group (function () {
-    Route::post('/add',[PoleController::class ,'store']);
-    Route::put('/update/{id}', [PoleController::class ,'update']);
-    Route::delete('/delete/{id}', [PoleController::class ,'destroy']);
-});
-
+  require __DIR__. "/../app/Modules/Poles/routes/poleRoutes.php"; 
 
 // Routes des Types
-//Route::resource('types', TypeController::class);
-Route::get('typeBy',[TypeController::class,'searchBy']);
-Route::get('types',[TypeController::class,'index']);
-Route::prefix('/type')-> group (function () {
-    Route::post('/add',[TypeController::class ,'store']);
-    Route::put('/update/{id}', [TypeController::class ,'update']);
-    Route::delete('/delete/{id}', [TypeController::class ,'destroy']);
-});
+require __DIR__. "/../app/Modules/Types/routes/typeRoutes.php"; 
 
-// Routes des Roles
-//Route::resource('roles', RoleController::class);
-Route::get('roleBy',[RoleController::class,'searchBy']);
-Route::get('roles',[RoleController::class,'index']);
-Route::prefix('/role')-> group (function () {
-    Route::post('/add',[RoleController::class ,'store']);
-    Route::put('/update/{id}', [RoleController::class ,'update']);
-    Route::delete('/delete/{id}', [RoleController::class ,'destroy']);
-});
+//Routes Roles
+require __DIR__. "/../app/Modules/Roles/routes/roleRoutes.php"; 
