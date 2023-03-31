@@ -52,4 +52,14 @@ class WpUserRepository implements CrudInterface
     public function delete(mixed $wpUser): void{
         $wpUser->delete();
     }
+    
+    /**
+     * getById
+     *
+     * @param  int $id
+     * @return mixed
+     */
+    public function getById(int $id): mixed{
+       return WpUser::where("id", $id);
+    }
 }

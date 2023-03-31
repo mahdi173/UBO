@@ -6,8 +6,11 @@ use App\Filters\WpUserFilters;
 use App\Models\WpUser;
 use App\Repositories\WpUserRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class WpUserService
 {       
@@ -45,7 +48,18 @@ class WpUserService
         $this->wpUserRepository->update($wpUser, $data);
         return response()->json($wpUser, 200);
     }
-    
+
+    public function getWpUser($request,WpUser $wpUser): JsonResponse{
+        $query= $this->wpUserRepository->getById($wpUser->id);
+        $userDetails= $query->siteRole($request->input('filters'),$request->input('sort'))->firstOrFail()->toArray();
+
+        $sites = $userDetails["sites"];
+
+        $userDetails["sites"]= collect($sites)->unique()->values()->all();
+
+        return response()->json($userDetails);
+    }
+
     /**
      * deleteWpUser
      *
