@@ -75,4 +75,9 @@ class WpSiteController extends Controller
     {
         return $this->wpSiteService->deleteWpSite($wpSite);
     }
+    public function showUsers( WpSite $site)
+    {
+         return $this->wpSiteService->showUsers($site);
+    }
 }
+

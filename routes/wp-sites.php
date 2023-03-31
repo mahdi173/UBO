@@ -8,3 +8,4 @@ Route::post('wp-sites', [WpSiteController::class, 'store'])->name('wp-sites.stor
 Route::put('wp-sites/{wpSite}', [WpSiteController::class, 'update'])->name('wp-sites.update');
 Route::delete('wp-sites/{wpSite}', [WpSiteController::class, 'destroy'])->name('wp-sites.destroy');
 Route::get('wp-sites/{wpSite}', [WpSiteController::class, 'show'])->name('wp-sites.show');
+Route::get('/sites/{site}', [WpSiteController::class, 'showUsers']);
