@@ -50,8 +50,7 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
     }
     public function showUsers(WpSite $wpSite) :JsonResponse{
        $siteWithUsers = $wpSite->with('pole', 'type','users.roles')->first();
-       unset($siteWithUsers['pole_id']);
-       unset($siteWithUsers['type_id']);
+     
        return response()->json($siteWithUsers, 200);
     }
     
