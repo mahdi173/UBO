@@ -48,10 +48,17 @@ class WpUserService
         $this->wpUserRepository->update($wpUser, $data);
         return response()->json($wpUser, 200);
     }
-
-    public function getWpUser($request,WpUser $wpUser): JsonResponse{
-        $query= $this->wpUserRepository->getById($wpUser->id);
-        $userDetails= $query->siteRole($request->input('filters'),$request->input('sort'))->firstOrFail()->toArray();
+    
+    /**
+     * getWpUser
+     *
+     * @param  mixed $request
+     * @param  WpUser $wpUser
+     * @return JsonResponse
+     */
+    public function getWpUser(WpUser $wpUser): JsonResponse
+    {
+        $userDetails= $this->wpUserRepository->getById($wpUser->id)->toArray();
 
         $sites = $userDetails["sites"];
 

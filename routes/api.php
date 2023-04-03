@@ -26,13 +26,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // require __DIR__.'/wp-roles.php';
-    // require __DIR__.'/wp-sites.php';
-    // require __DIR__.'/wp-users.php';
+    require __DIR__.'/wp-roles.php';
+    require __DIR__.'/wp-sites.php';
+    require __DIR__.'/wp-users.php';
 });
-require __DIR__.'/wp-roles.php';
-require __DIR__.'/wp-sites.php';
-require __DIR__.'/wp-users.php';
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

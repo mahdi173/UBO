@@ -60,6 +60,11 @@ class WpUserRepository implements CrudInterface
      * @return mixed
      */
     public function getById(int $id): mixed{
-       return WpUser::where("id", $id);
+        return WpUser::with(['sites', "sites.roles"=> function($query) use ($id){
+            $query->whereHas('users', function( $query)  use ($id){
+                $query->where ('wp_user_id', $id);
+    
+            });
+        }])->find($id);
     }
 }
