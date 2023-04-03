@@ -84,9 +84,9 @@ class WpSiteService
             return response()->json($results);
         }
     }
-    public function showUsers(WpSite $site)
+    public function showUsers(WpSite $wpSite)
     {
-         return $this->wpSiteRepository->showUsers( $site);
+         return $this->wpSiteRepository->showUsers( $wpSite);
         
     }
 }

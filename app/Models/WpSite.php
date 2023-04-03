@@ -23,7 +23,7 @@ class WpSite extends Model
         'pole_id',
         'type_id'
     ];
-    
+    protected $hidden = ['pole_id', 'type_id'];
     /**
      * type
      *
