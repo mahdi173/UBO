@@ -48,13 +48,11 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
     public function delete(mixed $wpSite): void{
         $wpSite->delete();
     }
-    public function showUsers(WpSite $site) :JsonResponse{
-        $utilisateurs = $site->users()
-        ->with(['roles' => function($query) {
-            $query->select( 'wp_role_id','name');
-        }])
-        ->get();
-         return response()->json($utilisateurs, 200);
+    public function showUsers(WpSite $wpSite) :JsonResponse{
+       $siteWithUsers = $wpSite->with('pole', 'type','users.roles')->first();
+       unset($siteWithUsers['pole_id']);
+       unset($siteWithUsers['type_id']);
+       return response()->json($siteWithUsers, 200);
     }
     
 
