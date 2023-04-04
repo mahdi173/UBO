@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\WpUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class CrudWpUserTest extends TestCase
+class WpUserTest extends TestCase
 {
-    public function testGetAllWpUsers(): void
+    public function test_get_all_wpUsers_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -18,19 +19,14 @@ class CrudWpUserTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function testStoreWpUser(): void
+    public function test_store_wpUser_succefully(): void
     {
         $token= $this->getUserToken();
 
-        $data = [
-            "userName" => fake()->name,
-            "firstName" => "John",
-            "lastName" => "Doe",
-            "email" => fake()->safeEmail()
-        ];
+        $data = WpUser::factory()->make();
 
         $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('POST', 'api/wp-users', $data, ['Accept' => 'application/json'])
+            ->json('POST', 'api/wp-users', $data->toArray(), ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonStructure([
                 "userName",
@@ -43,7 +39,7 @@ class CrudWpUserTest extends TestCase
             ]);
     }
 
-    public function testUpdateWpUser(): void
+    public function test_update_wpUser_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -68,7 +64,7 @@ class CrudWpUserTest extends TestCase
             ]);
     }
 
-    public function testDeleteWpUser(): void
+    public function test_delete_wpUser_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -81,7 +77,7 @@ class CrudWpUserTest extends TestCase
             ]);
     }
 
-    public function testGetWpUser(): void
+    public function test_show_wpUser_succefully(): void
     {
         $token= $this->getUserToken();
 
