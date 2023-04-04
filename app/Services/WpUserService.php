@@ -58,11 +58,7 @@ class WpUserService
      */
     public function getWpUser(WpUser $wpUser): JsonResponse
     {
-        $userDetails= $this->wpUserRepository->getById($wpUser->id)->toArray();
-
-        $sites = $userDetails["sites"];
-
-        $userDetails["sites"]= collect($sites)->unique()->values()->all();
+        $userDetails= $this->wpUserRepository->getById($wpUser->id);
 
         return response()->json($userDetails);
     }
