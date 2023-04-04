@@ -64,9 +64,8 @@ class WpUserRepository implements CrudInterface
         return WpUser::with(['sites'=> function($query){
             $query->select(DB::raw('DISTINCT(wp_sites.id), wp_sites.*'));
         }, "sites.roles"=> function($query) use ($id){
-            $query->whereHas('users', function( $query)  use ($id){
-                $query->where ('wp_user_id', $id);
-    
+            $query->whereIn('wp_role_id', function( $query)  use ($id){
+                $query->select('wp_role_id')->where('wp_user_id', $id);    
             });
         }])->find($id);
     }
