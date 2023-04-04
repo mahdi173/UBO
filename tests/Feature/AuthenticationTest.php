@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-   
-    public function testRegistration()
+    public function test_register_user_succefully()
     {
         $userData = [
             "userName" => fake()->name,
@@ -28,11 +28,13 @@ class AuthenticationTest extends TestCase
             ]);
     }
 
-    public function testLogin()
+    public function test_login_user_succefully()
     {
+        $user=  User::factory()->create();
+
         $loginData = [
-            "email" => "testnewubo@email.com",
-            "password" => "123456789",
+            "email" => $user->email,
+            "password" => "secret",
         ];
 
         $this->json('POST', 'api/login', $loginData, ['Accept' => 'application/json'])
