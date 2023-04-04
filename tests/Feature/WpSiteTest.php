@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\WpSite;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class CrudWpSiteTest extends TestCase
+class WpSiteTest extends TestCase
 {
-    public function testGetAllWpSites(): void
+    public function test_get_all_wpSites_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -18,7 +19,7 @@ class CrudWpSiteTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function testStoreWpSite(): void
+    public function test_store_wpSite_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -29,7 +30,7 @@ class CrudWpSiteTest extends TestCase
             "type_id" => 1
         ];
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
+       $this->withHeader('Authorization', 'Bearer ' . $token)
             ->json('POST', 'api/wp-sites', $data, ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -43,7 +44,7 @@ class CrudWpSiteTest extends TestCase
             ]);
     }
 
-    public function testUpdateWpSite(): void
+    public function test_update_wpSite_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -66,7 +67,7 @@ class CrudWpSiteTest extends TestCase
             ]);
     }
 
-    public function testDeleteWpSite(): void
+    public function test_delete_wpSite_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -79,7 +80,7 @@ class CrudWpSiteTest extends TestCase
             ]);
     }
 
-    public function testGetWpSite(): void
+    public function test_show_wpSite_succefully(): void
     {
         $token= $this->getUserToken();
 
