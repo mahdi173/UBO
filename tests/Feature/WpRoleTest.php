@@ -3,13 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\WpRole;
 use Tests\TestCase;
 
-class CrudWpRoleTest extends TestCase
+class WpRoleTest extends TestCase
 {
-    public function testGetAllWpRoles(): void
+    public function test_get_all_wpRoles_succefully(): void
     {
         $token= $this->getUserToken();
 
@@ -18,16 +17,14 @@ class CrudWpRoleTest extends TestCase
         ->assertStatus(200);
     }
 
-    public function testStoreWpRole(): void
+    public function test_store_wpRole_succefully(): void
     {
         $token= $this->getUserToken();
 
-        $role = [
-            "name" => fake()->name
-        ];
+        $role = WpRole::factory()->make();
 
         $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('POST', 'api/wp-roles', $role, ['Accept' => 'application/json'])
+            ->json('POST', 'api/wp-roles', $role->toArray(), ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonStructure([
                 "name",
@@ -37,16 +34,14 @@ class CrudWpRoleTest extends TestCase
             ]);
     }
 
-    public function testUpdateWpRole(): void
+    public function test_update_wpRole_succefully(): void
     {
         $token= $this->getUserToken();
 
-        $role = [
-            "name" => fake()->name
-        ];
+        $role = WpRole::factory()->make();
 
         $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('PUT', 'api/wp-roles/11', $role, ['Accept' => 'application/json'])
+            ->json('PUT', 'api/wp-roles/11', $role->toArray(), ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonStructure([
                 "id",
@@ -57,7 +52,7 @@ class CrudWpRoleTest extends TestCase
             ]);
     }
 
-    public function testDeleteRole(): void
+    public function test_delete_wpRole_succefully(): void
     {        
         $token= $this->getUserToken();
 
@@ -70,7 +65,7 @@ class CrudWpRoleTest extends TestCase
             ]);
     }
 
-    public function testGetWpRole(): void
+    public function test_show_wpRole_succefully(): void
     {
         $token= $this->getUserToken();
 
