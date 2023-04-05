@@ -2,105 +2,112 @@
 
 namespace Tests\Feature;
 
+use App\Models\Pole;
+use App\Models\Type;
 use App\Models\User;
 use App\Models\WpSite;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Traits\RequestTrait;
 use Tests\TestCase;
 
 class WpSiteTest extends TestCase
 {
-    public function test_get_all_wpSites_succefully(): void
+    use RequestTrait;
+
+    public function test_get_all_wpsites_succefully(): void
     {
         $token= $this->getUserToken();
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('GET', 'api/wp-sites', ['Accept' => 'application/json'])
-            ->assertStatus(200);
+        $this->makeRequest($token, 'GET', 'api/wp-sites', ['Accept' => 'application/json'], 200);
     }
 
-    public function test_store_wpSite_succefully(): void
+    public function test_store_wpsite_succefully(): void
     {
+        $token= $this->getUserToken();
+
+        $site= WpSite::factory()->make();
+        $pole= Pole::factory()->create();
+        $type= Type::factory()->create();
+
+        $siteData = $site->toArray();
+        $siteData ["type_id"]= $type->id;
+        $siteData["pole_id"]= $pole->id;
+
+        $structure= [
+            "name",
+            "domain",
+            "created_at",
+            "updated_at",
+            "id"
+        ];
+
+        $param=['Accept' => 'application/json'];
+
+        $this->makeRequest($token, 'POST', 'api/wp-sites', $param, 200, $structure, $siteData);
+    }
+
+    public function test_update_wpsite_succefully(): void
+    {
+        $site= WpSite::factory()->create();
+
         $token= $this->getUserToken();
 
         $data = [
             "name" => fake()->name,
-            "domain" => fake()->name,
-            "pole_id" => 1,
-            "type_id" => 1
         ];
 
-       $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('POST', 'api/wp-sites', $data, ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "name",
-                "domain",
-                "created_at",
-                "updated_at",
-                "id",
-                "pole",
-                "type"
-            ]);
-    }
-
-    public function test_update_wpSite_succefully(): void
-    {
-        $token= $this->getUserToken();
-
-        $data = [
-            "name" => fake()->name,
+        $structure=[
+            "id",
+            "name",
+            "domain",
+            "deleted_at",
+            "created_at",
+            "updated_at"
         ];
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('PUT', 'api/wp-sites/4', $data, ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "id",
-                "name",
-                "domain",
-                "deleted_at",
-                "created_at",
-                "updated_at",
-                "pole",
-                "type"
-            ]);
+        $param=['Accept' => 'application/json'];
+        $url= 'api/wp-sites/'.$site->id;
+
+        $this->makeRequest($token, 'PUT', $url, $param, 200, $structure, $data);
     }
 
-    public function test_delete_wpSite_succefully(): void
+    public function test_delete_wpsite_succefully(): void
     {
+        $site= WpSite::factory()->create();
+
         $token= $this->getUserToken();
 
-        $id= rand(1,10);
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('delete', 'api/wp-sites/'.$id, ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "msg"
-            ]);
+        $structure=["msg"];
+
+        $param=['Accept' => 'application/json'];
+        $url= 'api/wp-sites/'.$site->id;
+
+        $this->makeRequest($token, 'delete', $url, $param, 200, $structure);
     }
 
-    public function test_show_wpSite_succefully(): void
+    public function test_show_wpsite_succefully(): void
     {
+        $site= WpSite::factory()->create();
+
         $token= $this->getUserToken();
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('GET', 'api/wp-sites/4', ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "id",
-                "name",
-                "domain",
-                "deleted_at",
-                "created_at",
-                "updated_at",
-                "pole",
-                "type",
-                "users"=> []
-            ]);
+        $structure= [
+            "id",
+            "name",
+            "domain",
+            "deleted_at",
+            "created_at",
+            "updated_at",
+            "users"=> []
+        ];
+        
+        $param= ['Accept' => 'application/json'];
+        $url= 'api/wp-sites/'.$site->id;
+
+        $this->makeRequest($token, 'GET', $url, $param, 200, $structure);
     }
 
-    public function getUserToken(){
+    public function getUserToken()
+    {
         $user=  User::factory()->create();
         $loginData = [
             "email" => $user->email,

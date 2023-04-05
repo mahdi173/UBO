@@ -40,7 +40,7 @@ class WpSiteService
     public function storeWpSite(array $data): JsonResponse
     {
         $wpSite= $this->wpSiteRepository->create($data);
-        return response()->json($wpSite->load('pole', 'type'));
+        return response()->json($wpSite);
     }
     
     /**
@@ -53,7 +53,7 @@ class WpSiteService
     public function updateWpSite(array $data, WpSite $wpSite): JsonResponse
     {
         $this->wpSiteRepository->update($wpSite, $data);
-        return response()->json($wpSite->load('pole', 'type'), 200);
+        return response()->json($wpSite, 200);
     }
     
     /**
