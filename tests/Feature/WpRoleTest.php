@@ -4,81 +4,95 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\WpRole;
+use App\Traits\RequestTrait;
 use Tests\TestCase;
 
 class WpRoleTest extends TestCase
 {
-    public function test_get_all_wpRoles_succefully(): void
+    use RequestTrait;
+
+    public function test_get_all_wproles_succefully(): void
     {
         $token= $this->getUserToken();
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-        ->json('GET', 'api/wp-roles', ['Accept' => 'application/json'])
-        ->assertStatus(200);
+        $this->makeRequest($token, 'GET', 'api/wp-roles', ['Accept' => 'application/json'], 200);
     }
 
-    public function test_store_wpRole_succefully(): void
-    {
-        $token= $this->getUserToken();
-
-        $role = WpRole::factory()->make();
-
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('POST', 'api/wp-roles', $role->toArray(), ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "name",
-                "updated_at",
-                "created_at",
-                "id",
-            ]);
-    }
-
-    public function test_update_wpRole_succefully(): void
+    public function test_store_wprole_succefully(): void
     {
         $token= $this->getUserToken();
 
         $role = WpRole::factory()->make();
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('PUT', 'api/wp-roles/11', $role->toArray(), ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "id",
-                "name",
-                "deleted_at",
-                "updated_at",
-                "created_at",
-            ]);
+        $structure= [
+            "name",
+            "updated_at",
+            "created_at",
+            "id",
+        ];
+
+        $param=['Accept' => 'application/json'];
+
+        $this->makeRequest($token, 'POST', 'api/wp-roles', $param, 200, $structure,  $role->toArray());
     }
 
-    public function test_delete_wpRole_succefully(): void
+    public function test_update_wprole_succefully(): void
+    {
+        $token= $this->getUserToken();
+
+        $role = WpRole::factory()->create();
+
+        $roleUpdate = WpRole::factory()->make();
+
+        $structure= [
+            "id",
+            "name",
+            "deleted_at",
+            "updated_at",
+            "created_at"
+        ];
+
+        $url='api/wp-roles/'.$role->id;
+
+        $param=['Accept' => 'application/json'];
+
+        $this->makeRequest($token, 'PUT', $url, $param, 200, $structure,  $roleUpdate->toArray());
+    }
+
+    public function test_delete_wprole_succefully(): void
     {        
+        $role = WpRole::factory()->create();
+
         $token= $this->getUserToken();
 
-        $id= rand(1,10);
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('delete', 'api/wp-roles/'.$id, ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "msg"
-            ]);
+        $structure= ["msg"];
+        $url='api/wp-roles/'.$role->id;
+
+        $param=['Accept' => 'application/json'];
+
+        $this->makeRequest($token, 'delete', $url, $param, 200, $structure);
     }
 
-    public function test_show_wpRole_succefully(): void
+    public function test_show_wprole_succefully(): void
     {
+        $role = WpRole::factory()->create();
+
         $token= $this->getUserToken();
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)
-            ->json('GET', 'api/wp-roles/6', ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "id",
-                "name",
-                "deleted_at",
-                "updated_at",
-                "created_at",
-            ]);
+
+        $structure= [
+            "id",
+            "name",
+            "deleted_at",
+            "updated_at",
+            "created_at",        
+        ];
+
+        $url='api/wp-roles/'.$role->id;
+
+        $param=['Accept' => 'application/json'];
+
+        $this->makeRequest($token, 'GET', $url, $param, 200, $structure);
     }
 
     public function getUserToken(){
