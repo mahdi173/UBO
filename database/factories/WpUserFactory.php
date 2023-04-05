@@ -23,7 +23,8 @@ class WpUserFactory extends Factory
             'firstName' => fake()->name,
             'lastName' => fake()->name,
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
+            'password' => bcrypt('secret')
         ];
     }
 }
