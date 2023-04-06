@@ -19,9 +19,10 @@ class WpSiteFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->name,
             'domain' => $this->faker->text(),
-        
+            "pole_id" => 1,
+            "type_id" => 1
         ];
     }
 }

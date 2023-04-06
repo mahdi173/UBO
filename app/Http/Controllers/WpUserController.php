@@ -49,8 +49,8 @@ class WpUserController extends Controller
      * @param  WpUser $wpUser
      * @return JsonResponse
      */
-    public function show(Request $request, WpUser $wpUser): JsonResponse{
-        return $this->wpUserService->getWpUser($request, $wpUser);
+    public function show(WpUser $wpUser): JsonResponse{
+        return $this->wpUserService->getWpUser($wpUser);
     }
    
     /**
