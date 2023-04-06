@@ -39,7 +39,16 @@ class TypeService implements RepositoryInterface{
      */
     public function show( string $id): JsonResponse{
         $type= Type::find($id);
-        return response()->json($type);
+        if($type){
+            return response()->json(
+            $type,
+            200
+            );
+            }
+            return response()->json([
+            'message' =>' type not found']
+            ,404
+            );
     }
      
     /**

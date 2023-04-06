@@ -50,12 +50,15 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
         $wpSite->delete();
     }
     public function showUsers(WpSite $wpSite) :JsonResponse{
-        $siteWithUsers = WpSite::with(['pole', 'type', 'users' => function ($query) use ($wpSite) {
-            $query->where('wp_site_id', $wpSite->id);
-        }, 'users.roles' => function ($query) use ($wpSite) {
-            $query->whereIn('wp_user_site_roles.wp_site_id', [$wpSite->id]);
+         $siteWithUsers = WpSite::with(['pole', 'type', 'users' => function ($query) use ($wpSite) {
+            $query->select(DB::raw('DISTINCT(wp_users.id), wp_users.*'))
+                ->whereHas('sites', function ($query) use ($wpSite) {
+                    $query->where('wp_site_id', $wpSite->id);
+                })
+                ->with(['roles' => function ($query) use ($wpSite) {
+                    $query->where('wp_user_site_roles.wp_site_id', [$wpSite->id]);
+                }]);
         }])->find($wpSite->id);
-        $siteWithUsers->setRelation('users', $siteWithUsers->users->unique());
         return response()->json($siteWithUsers, 200);
         
     }

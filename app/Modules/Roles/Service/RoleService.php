@@ -40,7 +40,16 @@ class RoleService implements RepositoryInterface{
      */
     public function show(string $id): JsonResponse{
         $role= Role::find($id);
-        return response()->json($role);
+        if($role){
+            return response()->json(
+            $role,
+            200
+            );
+            }
+            return response()->json([
+            'message' =>' role not found']
+            ,404
+            );
     }
       
     /**

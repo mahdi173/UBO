@@ -42,7 +42,16 @@ class PoleService implements RepositoryInterface{
      */
     public function show(string $id): JsonResponse{
         $pole= Pole::find($id);
-        return response()->json($pole);
+        if($pole){
+            return response()->json(
+            $pole,
+            200
+            );
+            }
+            return response()->json([
+            'message' =>' pole not found']
+            ,404
+            );
     }
     
     /**
