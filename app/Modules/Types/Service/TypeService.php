@@ -31,7 +31,25 @@ class TypeService implements RepositoryInterface{
             Type::create($request->all()),200
         );
     }
-    
+     /**
+     * showRole
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function show( string $id): JsonResponse{
+        $type= Type::find($id);
+        if($type){
+            return response()->json(
+            $type,
+            200
+            );
+            }
+            return response()->json([
+            'message' =>' type not found']
+            ,404
+            );
+    }
      
     /**
      * updateType
@@ -59,15 +77,16 @@ class TypeService implements RepositoryInterface{
      * @param  mixed $id
      * @return JsonResponse
      */
-    public function delete(Request $request , $id): JsonResponse{
+    public function delete($id): JsonResponse{
         $type = Type::find($id);
         if($type){
         return response()->json(
-        $type->delete(),200
+        $type->delete(),
+        200
         );
         }
         return response()->json([
-        'message' =>'not found'
+        'message' =>'item not found'
         ],404
         );
     }

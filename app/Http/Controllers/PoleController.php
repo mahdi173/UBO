@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pole;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePoleRequest;
 use App\Repository\RepositoryInterface;
@@ -45,6 +46,15 @@ class PoleController extends Controller
     }
     
     /**
+     * show
+     *
+     * @param  mixed $id
+     */
+    public function show(string $id){
+        return $this->repository->show($id);
+    }
+   
+    /**
      * update
      *
      * @param  mixed $request
@@ -55,6 +65,7 @@ class PoleController extends Controller
     {
          return $this->repository->update($request,$id);       
     }
+
        
     /**
      * destroy
@@ -63,9 +74,9 @@ class PoleController extends Controller
      * @param  mixed $id
      * @return void
      */
-    public function destroy(Request $request,string $id)
+    public function destroy(string $id)
     {
-        return $this->repository->delete($request,$id);
+        return $this->repository->delete($id);
     }
     
     

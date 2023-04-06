@@ -31,7 +31,26 @@ class RoleService implements RepositoryInterface{
             Role::create($request->all()),200
         );
     }
-    
+        
+    /**
+     * showRole
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function show(string $id): JsonResponse{
+        $role= Role::find($id);
+        if($role){
+            return response()->json(
+            $role,
+            200
+            );
+            }
+            return response()->json([
+            'message' =>' role not found']
+            ,404
+            );
+    }
       
     /**
      * updateRole
@@ -59,7 +78,7 @@ class RoleService implements RepositoryInterface{
      * @param  mixed $id
      * @return JsonResponse
      */
-    public function delete(Request $request , $id): JsonResponse{
+    public function delete($id): JsonResponse{
         $role = Role::find($id);
         if($role){
         return response()->json(

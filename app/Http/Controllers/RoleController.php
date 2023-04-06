@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreRoleRequest;
 use App\Repository\RepositoryInterface;
@@ -36,8 +37,16 @@ class RoleController extends Controller
     {
         return $this->repository->add($request);
     }
-
     
+    /**
+     * show
+     *
+     * @param  mixed $id
+     */
+    public function show(string $id){
+        return $this->repository->show($id);
+    }
+   
     /**
      * update
      *
@@ -58,8 +67,8 @@ class RoleController extends Controller
      * @param  mixed $id
      * @return void
      */
-    public function destroy(Request $request,string $id)
+    public function destroy(string $id)
     {
-        return $this->repository->delete($request,$id);
+        return $this->repository->delete($id);
     }
 }
