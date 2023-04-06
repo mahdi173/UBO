@@ -56,7 +56,7 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
                     $query->where('wp_site_id', $wpSite->id);
                 })
                 ->with(['roles' => function ($query) use ($wpSite) {
-                    $query->where('wp_user_site_roles.wp_site_id', [$wpSite->id]);
+                    $query->where('wp_user_site_roles.wp_site_id', $wpSite->id);
                 }]);
         }])->find($wpSite->id);
         return response()->json($siteWithUsers, 200);
