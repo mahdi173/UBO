@@ -44,6 +44,16 @@ class TypeController extends Controller
     }
 
     /**
+     * show
+     *
+     * @param  mixed $id
+     */
+    public function show(string $id){
+        return $this->repository->show($id);
+    }
+   
+
+    /**
      * update
      *
      * @param  mixed $request
@@ -63,9 +73,9 @@ class TypeController extends Controller
      * @param  mixed $id
      * @return voids
      */
-    public function destroy(Request $request,string $id)
+    public function destroy(string $id)
     {
-        return $this->repository->delete($request,$id);
+        return $this->repository->delete($id);
     }
 
 }

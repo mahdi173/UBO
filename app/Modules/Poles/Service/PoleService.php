@@ -32,6 +32,18 @@ class PoleService implements RepositoryInterface{
          Pole::create($request->all()),200
         );
     }
+
+
+     /**
+     * showPole
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function show(string $id): JsonResponse{
+        $pole= Pole::find($id);
+        return response()->json($pole);
+    }
     
     /**
      * updatePole
@@ -58,7 +70,7 @@ class PoleService implements RepositoryInterface{
      * @param  mixed $id
      * @return JsonResponse
      */
-    public function delete(Request $request , $id): JsonResponse{
+    public function delete($id): JsonResponse{
         $pole = Pole::find($id);
         if($pole){
         return response()->json(

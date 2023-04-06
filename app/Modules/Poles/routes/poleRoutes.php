@@ -8,8 +8,9 @@ use App\Http\Controllers\PoleController;
 
 
 Route::get('poles',[PoleController::class,'index']);
-Route::prefix('/pole')-> group (function () {
-    Route::post('/add',[PoleController::class ,'store']);
-    Route::put('/update/{id}', [PoleController::class ,'update']);
-    Route::delete('/delete/{id}', [PoleController::class ,'destroy']);
+Route::prefix('/poles')-> group (function () {
+    Route::post('/',[PoleController::class ,'store']);
+    Route::put('/{id}', [PoleController::class ,'update']);
+    Route::delete('/{id}', [PoleController::class ,'destroy']);
+    Route::get('/{id}', [PoleController::class ,'show']);
 });
