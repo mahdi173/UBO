@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Interfaces\RoleRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -32,9 +34,10 @@ class UserService
     {
         $user = $this->userRepository->create($data);
 
+        //$user->createToken("API TOKEN")->plainTextToken
         return response()->json([
             'message' => 'User Created Successfully',
-            'token' => $user->createToken("API TOKEN")->plainTextToken
+            'user' => $user
         ], 200);
     }
     

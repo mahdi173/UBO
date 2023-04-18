@@ -30,7 +30,7 @@ class WpUserRepository implements CrudInterface
         }
 
         return WpUser::create([
-            'userName' => $data['userName'],
+            'userName' => $data['email'],
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],

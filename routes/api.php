@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     require __DIR__.'/wp-roles.php';
     require __DIR__.'/wp-sites.php';
     require __DIR__.'/wp-users.php';
+    require __DIR__.'/users.php';
     require base_path("app/Modules/Poles/routes/poleRoutes.php");
     require base_path("app/Modules/Types/routes/typeRoutes.php");
     require base_path("app/Modules/Roles/routes/roleRoutes.php");

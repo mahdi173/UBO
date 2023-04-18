@@ -22,7 +22,6 @@ class StoreWpUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'userName' => 'required|string|unique:wp_users,userName',
             'firstName' => 'required|string',
             'lastName' => 'required|string',
             'email' => 'required|string|unique:wp_users,email'
@@ -37,7 +36,6 @@ class StoreWpUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'userName.required' => 'UserName is required!',
             'firstName.required' => 'FirstName is required!',
             'lastName.required' => 'LastName is required!',
             'email.required' => 'Email is required!',
