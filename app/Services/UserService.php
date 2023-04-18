@@ -62,4 +62,21 @@ class UserService
 
         return ['user' => $user, 'token' => $token];
     }
+
+     /**
+     * filter
+     *
+     * @param  Request $request
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse
+    {           
+        $results= User::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
+
+        if(!$request->paginate){
+            return  response()->json(["data"=> $results->get()]);
+        }else{
+            return response()->json($results);
+        }
+    }
 }

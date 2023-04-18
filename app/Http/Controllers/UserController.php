@@ -21,6 +21,16 @@ class UserController extends Controller
     public function __construct(private UserService  $userService)
     {
     }
+
+    /**
+     * index
+     *
+     * @return JsonResponse
+     */
+    public function index(Request $request): JsonResponse
+    {
+        return $this->userService->filter($request);
+    }
     
      /**
      * store
