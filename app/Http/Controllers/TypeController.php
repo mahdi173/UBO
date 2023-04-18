@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTypeRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdateTypeRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class TypeController extends Controller
 {    
@@ -20,7 +21,6 @@ class TypeController extends Controller
        
     }    
       
-      
     /**
      * index
      *
@@ -31,7 +31,6 @@ class TypeController extends Controller
         return $this->repository->searchBy($request);
     }
 
-  
     /**
      * store
      *
@@ -40,6 +39,9 @@ class TypeController extends Controller
      */
     public function store(StoreTypeRequest $request)
     {
+        if ($request->user()->cannot('update', Type::class)) {
+            abort(403);
+        }
         return $this->repository->add($request);
     }
 
@@ -51,7 +53,6 @@ class TypeController extends Controller
     public function show(string $id){
         return $this->repository->show($id);
     }
-   
 
     /**
      * update
@@ -62,9 +63,11 @@ class TypeController extends Controller
      */
     public function update(UpdateTypeRequest $request, string $id)
     {
+        if ($request->user()->cannot('update', Type::class)) {
+            abort(403);
+        }
         return $this->repository->update($request,$id);
     }
-
         
     /**
      * destroy
@@ -75,6 +78,11 @@ class TypeController extends Controller
      */
     public function destroy(string $id)
     {
+        try {
+            $this->authorize('delete', Type::class);
+        }catch (AuthorizationException){
+            abort(403);
+        }
         return $this->repository->delete($id);
     }
 
