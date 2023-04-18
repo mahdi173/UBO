@@ -40,6 +40,10 @@ class UserController extends Controller
      */
     public function store(RegisterRequest $request): JsonResponse
     {
+        if ($request->user()->cannot('create', User::class)) {
+            abort(403);
+        }
+  
         return  $this->userService->storeUser($request->all());
     }
 
@@ -52,6 +56,10 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     { 
+        if ($request->user()->cannot('update', User::class)) {
+            abort(403);
+        }
+
         return  $this->userService->updateUser( $user, $request->all());
     }
 
@@ -65,8 +73,6 @@ class UserController extends Controller
         return $this->userService->getUser($user);
     }
    
-   
-    
     /**
      * destroy
      *
@@ -75,6 +81,11 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
+        try {
+            $this->authorize('delete', User::class);
+        }catch (AuthorizationException){
+            abort(403);
+        }
         return$this->userService->deleteUser($user);
     }
 }
