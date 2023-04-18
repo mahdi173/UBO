@@ -39,8 +39,16 @@ class UserRepository implements UserRepositoryInterface, CrudInterface
             'role_id'=> $roleId
         ]);
     }
-
+    
+    /**
+     * update
+     *
+     * @param  mixed $user
+     * @param  array $data
+     * @return void
+     */
     public function update(mixed $user, array $data){
+        $user->update($data);
     }
 
     public function delete(mixed $user){

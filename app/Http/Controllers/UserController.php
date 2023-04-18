@@ -42,4 +42,16 @@ class UserController extends Controller
     {
         return  $this->userService->storeUser($request->all());
     }
+
+    /**
+     * update
+     *
+     * @param  UpdateUserRequest $request
+     * @param  User $user
+     * @return JsonResponse
+     */
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
+    { 
+        return  $this->userService->updateUser( $user, $request->all());
+    }
 }

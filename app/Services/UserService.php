@@ -79,4 +79,10 @@ class UserService
             return response()->json($results);
         }
     }
+
+    public function UpdateUser(User $user, array $data): JsonResponse
+    {
+        $this->userRepository->update($user, $data);
+        return response()->json($user->load('role'), 200);
+    }
 }
