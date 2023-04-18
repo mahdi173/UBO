@@ -7,6 +7,7 @@ use App\Http\Requests\StoreWpUserRequest;
 use App\Http\Requests\UpdateWpUserRequest;
 use App\Models\WpUser;
 use App\Services\WpUserService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -40,6 +41,9 @@ class WpUserController extends Controller
      */
     public function store(StoreWpUserRequest $request): JsonResponse
     {
+        if ($request->user()->cannot('createWpUser', WpUser::class)) {
+            abort(403);
+        }
         return  $this->wpUserService->storeWpUser($request->all());
     }
         
@@ -62,6 +66,9 @@ class WpUserController extends Controller
      */
     public function update(UpdateWpUserRequest $request, WpUser $wpUser): JsonResponse
     { 
+        if ($request->user()->cannot('updateWpUser', WpUser::class)) {
+            abort(403);
+        }
         return  $this->wpUserService->updateWpUser($request->all(), $wpUser);
     }
     
@@ -73,6 +80,11 @@ class WpUserController extends Controller
      */
     public function destroy(WpUser $wpUser): JsonResponse
     {
+        try {
+            $this->authorize('deleteWpUser', WpUser::class);
+        }catch (AuthorizationException){
+            abort(403);
+        }
         return$this->wpUserService->deleteWpUser($wpUser);
     }
 }
