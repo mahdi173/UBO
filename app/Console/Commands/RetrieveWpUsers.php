@@ -26,6 +26,6 @@ class RetrieveWpUsers extends Command
      */
     public function handle(WpUserService $wpUserService): void
     {
-        $wpUserService->getAllWpUsers_wordpress();   
+        $wpUserService->getAllWpUsers();   
     }
 }

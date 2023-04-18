@@ -94,18 +94,18 @@ class WpUserService
     }
     
     /**
-     * getAllWpUsers_wordpress
+     * getAllWpUsers
      *
      * @return void
      */
-    public function getAllWpUsers_wordpress(){
+    public function getAllWpUsers(){
         //$username="kei";
         //$password= 'GYO1&rD$FE1!Oc6Hy@';
         //withBasicAuth($username, $password)
 
         $response = Http::get('http://ubowordpress.com/wp-json/wp/v2/wp-users');
         
-        $users = json_decode($response->getBody());
+        $users = json_decode($response->json());
         
         foreach($users as $user){
 
