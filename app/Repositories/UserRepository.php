@@ -50,8 +50,15 @@ class UserRepository implements UserRepositoryInterface, CrudInterface
     public function update(mixed $user, array $data){
         $user->update($data);
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  mixed $user
+     * @return void
+     */
     public function delete(mixed $user){
+        $user->delete();
     }
     
     /**

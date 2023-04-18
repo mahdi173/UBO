@@ -54,4 +54,27 @@ class UserController extends Controller
     { 
         return  $this->userService->updateUser( $user, $request->all());
     }
+
+    /**
+     * show
+     *
+     * @param  User $User
+     * @return JsonResponse
+     */
+    public function show(User $user): JsonResponse{
+        return $this->userService->getUser($user);
+    }
+   
+   
+    
+    /**
+     * destroy
+     *
+     * @param  User $user
+     * @return JsonResponse
+     */
+    public function destroy(User $user): JsonResponse
+    {
+        return$this->userService->deleteUser($user);
+    }
 }

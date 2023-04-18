@@ -85,4 +85,15 @@ class UserService
         $this->userRepository->update($user, $data);
         return response()->json($user->load('role'), 200);
     }
+
+    public function getUser(User $user): JsonResponse
+    {
+        return response()->json($user->load('role'), 200);
+    }
+    
+    public function deleteUser( User $user): JsonResponse
+    {
+        $this->userRepository->delete($user);
+        return response()->json(["msg"=>"Item successfully deleted!"], 200);
+    }
 }
