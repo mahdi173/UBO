@@ -25,9 +25,9 @@ class UserController extends Controller
     /**
      * index
      *
-     * @return JsonResponse
+     * @return mixed
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): mixed
     {
         return $this->userService->filter($request);
     }

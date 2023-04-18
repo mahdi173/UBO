@@ -61,7 +61,7 @@ class Handler extends ExceptionHandler
             if ($request->is('api/*')) {
                 if ($statusCode == 403) {
                     return response()->json([
-                        'message' => 'Unauthorized action.'
+                        'message' => 'Forbidden action.'
                     ], 403);               
                  }
             }

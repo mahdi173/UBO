@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use stdClass;
 
 class UserService
 {        
@@ -27,10 +28,10 @@ class UserService
     /**
      * storeUser
      *
-     * @param  mixed $data
+     * @param  array $data
      * @return JsonResponse
      */
-    public function storeUser($data): JsonResponse
+    public function storeUser(array $data): JsonResponse
     {
         $user = $this->userRepository->create($data);
 
@@ -67,17 +68,20 @@ class UserService
      * filter
      *
      * @param  Request $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function filter(Request $request): JsonResponse
+    public function filter(Request $request): mixed
     {           
-        $results= User::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
+        $response= new stdClass();
+        $filter= User::filter($request->input('filters'),$request->input('sort'));
 
         if(!$request->paginate){
-            return  response()->json(["data"=> $results->get()]);
+            $response->data= $filter->get();
         }else{
-            return response()->json($results);
+            $response= $filter->paginate($request->paginate);
         }
+
+        return $response;
     }
 
     public function UpdateUser(User $user, array $data): JsonResponse

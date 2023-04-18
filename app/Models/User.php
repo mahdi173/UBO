@@ -73,10 +73,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param  mixed $query
      * @param  ?array $filters
      * @param  ?array $sort
-     * @param  mixed $paginate
      * @return void
      */
-    public function scopeFilter($query, ?array $filters, ?array $sort, $paginate)
+    public function scopeFilter($query, ?array $filters, ?array $sort)
     {
         if(is_array($filters)){
             foreach ($filters as $filter => $value) {
@@ -131,11 +130,7 @@ class User extends Authenticatable implements MustVerifyEmail
                }
            );
         }
-
-        if($paginate){
-            $query=  $query->paginate($paginate);
-        }
-
+        
         return $query;
     }
 
