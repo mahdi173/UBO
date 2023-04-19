@@ -8,6 +8,7 @@ use App\Http\Requests\StoreRoleRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
@@ -77,8 +78,8 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        if (Gate::denies('delete', Role::findOrFail($id))) {
-            abort(403);
+        if(Auth::user()->cannot('delete', Type::class)){
+            abort(403); 
         }
         return $this->repository->delete($id);
     }
