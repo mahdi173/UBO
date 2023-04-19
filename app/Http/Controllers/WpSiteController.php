@@ -6,8 +6,11 @@ use App\Http\Requests\StoreWpSiteRequest;
 use App\Http\Requests\UpdateWpSiteRequest;
 use App\Models\WpSite;
 use App\Services\WpSiteService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class WpSiteController extends Controller
 {
@@ -39,6 +42,9 @@ class WpSiteController extends Controller
      */
     public function store(StoreWpSiteRequest $request): JsonResponse
     {
+        if ($request->user()->cannot('createWpSite', WpSite::class)) {
+            abort(403);
+        }
         return $this->wpSiteService->storeWpSite($request->all());
     }
     
@@ -61,6 +67,9 @@ class WpSiteController extends Controller
      */
     public function update(UpdateWpSiteRequest $request, WpSite $wpSite): JsonResponse
     {
+        if ($request->user()->cannot('updateWpSite', WpSite::class)) {
+            abort(403);
+        }
         return  $this->wpSiteService->updateWpSite($request->all(), $wpSite);
     }
 
@@ -73,8 +82,12 @@ class WpSiteController extends Controller
      */
     public function destroy( WpSite $wpSite): JsonResponse
     {
+        if(Auth::user()->cannot('delete', WpSite::class)){
+            abort(403); 
+        } 
         return $this->wpSiteService->deleteWpSite($wpSite);
     }
+
     public function showUsers( WpSite $wpSite)
     {
          return $this->wpSiteService->showUsers($wpSite);

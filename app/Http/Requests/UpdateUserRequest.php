@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreWpUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,15 @@ class StoreWpUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
-            'email' => 'required|string|unique:wp_users,email'
+                'userName' => 'sometimes|required|string|unique:users,userName,'.request()->user->id,
+                'firstName' => 'sometimes|required|string',
+                'lastName' => 'sometimes|required|string',
+                'email' => 'sometimes|required|string|unique:users,email,'.request()->user->id,
+                'role_id'=> 'sometimes|required|exists:roles,id'
         ];
     }
 
-        /**
+    /**
      * messages
      *
      * @return void
@@ -36,11 +38,13 @@ class StoreWpUserRequest extends FormRequest
     public function messages()
     {
         return [
+            'userName.required' => 'UserName is required!',
             'firstName.required' => 'FirstName is required!',
             'lastName.required' => 'LastName is required!',
             'email.required' => 'Email is required!',
             'userName.unique' => 'UserName already exist!',
-            'email.unique' => 'Email already exist!'
+            'email.unique' => 'Email already exist!',
+            'role_id.exists'=> "Role doesn't exist!"
         ];
     }
 }

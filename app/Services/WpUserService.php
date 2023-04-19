@@ -2,15 +2,13 @@
 
 namespace App\Services;
 
-use App\Filters\WpUserFilters;
 use App\Models\WpUser;
+use App\Repositories\WpRoleRepository;
+use App\Repositories\WpSiteRepository;
 use App\Repositories\WpUserRepository;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Http;
 
 class WpUserService
 {       
@@ -20,7 +18,10 @@ class WpUserService
      * @param  WpUserRepository $wpUserRepository
      * @return void
      */
-    public function __construct(private WpUserRepository $wpUserRepository)
+    public function __construct(    private WpUserRepository $wpUserRepository,
+                                    private WpSiteRepository $wpSiteRepository,
+                                    private WpRoleRepository $wpRoleRepository
+                                )
     {
     }
     
@@ -89,6 +90,64 @@ class WpUserService
             return  response()->json(["data"=> $results->get()]);
         }else{
             return response()->json($results);
+        }
+    }
+    
+    /**
+     * getAllWpUsers
+     *
+     * @return void
+     */
+    public function getAllWpUsers(){
+        //$username="kei";
+        //$password= 'GYO1&rD$FE1!Oc6Hy@';
+        //withBasicAuth($username, $password)
+
+        $response = Http::get('http://ubowordpress.com/wp-json/wp/v2/wp-users');
+        
+        $users = json_decode($response->json());
+        
+        foreach($users as $user){
+
+            $userRoles=$user->roles;
+
+            if ($userRoles){
+                foreach($userRoles as $userRole){
+                    $role= $this->wpRoleRepository->getWpRoleByName($userRole);
+    
+                    if(!$role){
+                        $this->wpRoleRepository->create(["name"=> $userRole]);
+                    }
+                }
+            }
+
+            $userSites=$user->sites;
+            
+            foreach($userSites as $userSite){
+                $site= $this->wpSiteRepository->getWpSiteByName($userSite->blogname);
+
+                if(!$site){
+                    $this->wpSiteRepository->create([
+                        "name"=> $userSite->blogname,
+                        "domain"=> $userSite->domain,
+                        "type_id"=>1,
+                        "pole_id"=>1
+                    ]);                   
+                }
+            }
+
+            $userDb= $this->wpUserRepository->getWpUserByUsername($user->username);
+            
+            if(!$userDb)
+            {
+                $this->wpUserRepository->create([
+                    "userName"=>$user->username,
+                    "firstName"=>$user->firstname,
+                    "lastName"=>$user->lastname,
+                    "email"=>$user->email,
+                    "password"=> $user->pass
+                ]);
+            }
         }
     }
 }

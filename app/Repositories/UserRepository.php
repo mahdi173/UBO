@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Interfaces\CrudInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
+use Illuminate\Support\Str;
+
 
 class UserRepository implements UserRepositoryInterface, CrudInterface 
 {    
@@ -24,22 +26,39 @@ class UserRepository implements UserRepositoryInterface, CrudInterface
      * @return User
      */
     public function create(array $data): User{
+        $roleId=1;
+        if(isset($data['role_id'])){
+            $roleId= $data['role_id'];
+        }
         return User::create([
             'userName' => $data['userName'],
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'role_id'=> 1
+            'password' => bcrypt(Str::random(12)),
+            'role_id'=> $roleId
         ]);
     }
-
+    
+    /**
+     * update
+     *
+     * @param  mixed $user
+     * @param  array $data
+     * @return void
+     */
     public function update(mixed $user, array $data){
-        
+        $user->update($data);
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  mixed $user
+     * @return void
+     */
     public function delete(mixed $user){
-        
+        $user->delete();
     }
     
     /**

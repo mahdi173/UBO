@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePoleRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdatePoleRequest;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PoleController extends Controller
 {    
@@ -22,8 +25,6 @@ class PoleController extends Controller
     {
     }    
    
-    
-        
     /**
      * index
      *
@@ -33,6 +34,7 @@ class PoleController extends Controller
     public function index(Request $request){
         return $this->repository->searchBy($request);
     }
+    
     /**
      * store
      *
@@ -41,7 +43,9 @@ class PoleController extends Controller
      */
     public function store(StorePoleRequest $request)
     {     
-        //$pole=$request->validated();
+        if ($request->user()->cannot('create', Pole::class)) {
+            abort(403);
+        }
         return $this->repository->add($request);
     }
     
@@ -63,6 +67,9 @@ class PoleController extends Controller
      */
     public function update(UpdatePoleRequest $request, string $id)
     {
+        if ($request->user()->cannot('update', Pole::class)) {
+            abort(403);
+        }
          return $this->repository->update($request,$id);       
     }
 
@@ -75,7 +82,10 @@ class PoleController extends Controller
      * @return void
      */
     public function destroy(string $id)
-    {
+    {  
+        if(Auth::user()->cannot('delete', Type::class)){
+            abort(403); 
+        } 
         return $this->repository->delete($id);
     }
     

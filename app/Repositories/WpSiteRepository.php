@@ -63,4 +63,13 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
         
     }
 
+    /**
+     * getWpSiteByName
+     *
+     * @param  string $name
+     * @return WpSite
+     */
+    public function getWpSiteByName(string $name): WpSite|null{
+        return WpSite::where("name", $name)->first();
+    }
 }

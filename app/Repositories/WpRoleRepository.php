@@ -47,4 +47,14 @@ class WpRoleRepository implements CrudInterface
     public function delete(mixed $wpRole): void{
         $wpRole->delete();
     }
+
+    /**
+     * getWpRoleByName
+     *
+     * @param  string $name
+     * @return WpRole
+     */
+    public function getWpRoleByName(string $name): ?WpRole{
+        return WpRole::where("name", $name)->first();
+    }
 }

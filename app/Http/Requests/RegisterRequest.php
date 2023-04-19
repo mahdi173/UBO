@@ -26,8 +26,7 @@ class RegisterRequest extends FormRequest
             'firstName' => 'required|string',
             'lastName' => 'required|string',
             'email' => 'required|string|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'password_confirmation' => 'required|min:8'
+            'role_id'=> 'required|exists:roles,id',
         ];
     }
 
@@ -43,11 +42,9 @@ class RegisterRequest extends FormRequest
             'firstName.required' => 'FirstName is required!',
             'lastName.required' => 'LastName is required!',
             'email.required' => 'Email is required!',
-            'password.required' => 'Password is required!',
-            'password.min' => 'Password must have more than 8 characters!',
-            "password.confirmed" => "Your passwords  didn't match",
             'userName.unique' => 'UserName already exist!',
-            'email.unique' => 'Email already exist!'
+            'email.unique' => 'Email already exist!',
+            'role_id.exists'=> "Role doesn't exist!"
         ];
     }
 }

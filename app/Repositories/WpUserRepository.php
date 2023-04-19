@@ -24,12 +24,17 @@ class WpUserRepository implements CrudInterface
      * @return WpUser
      */
     public function create(array $data): WpUser {
+        $password= bcrypt("123456789");
+        if(isset($data['password'])){
+            $password= $data['password'];
+        }
+
         return WpUser::create([
-            'userName' => $data['userName'],
+            'userName' => $data['email'],
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],
-            'password' => bcrypt("123456789"),
+            'password' => $password
         ]);
     }
     
@@ -68,5 +73,15 @@ class WpUserRepository implements CrudInterface
                 $query->select('wp_role_id')->where('wp_user_id', $id);    
             });
         }])->find($id);
+    }
+
+    /**
+     * getWpUserByUsername
+     *
+     * @param  string $name
+     * @return WpUser
+     */
+    public function getWpUserByUsername(string $name): WpUser|null{
+        return WpUser::where("userName", $name)->first();
     }
 }
