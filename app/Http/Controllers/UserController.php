@@ -9,6 +9,7 @@ use App\Services\UserService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
@@ -82,9 +83,9 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        if (Gate::denies('delete', $user)) {
-            abort(403);
-        } 
+        if(Auth::user()->cannot('delete', WpUser::class)){
+            abort(403); 
+        }
         return$this->userService->deleteUser($user);
     }
 }
