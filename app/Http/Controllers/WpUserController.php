@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WpUserController extends Controller
 {
@@ -81,8 +82,8 @@ class WpUserController extends Controller
      */
     public function destroy(WpUser $wpUser): JsonResponse
     {
-        if (Gate::denies('delete', $wpUser)) {
-            abort(403);
+        if(Auth::user()->cannot('delete', WpUser::class)){
+            abort(403); 
         }
         return$this->wpUserService->deleteWpUser($wpUser);
     }
