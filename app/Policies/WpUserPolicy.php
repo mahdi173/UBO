@@ -38,7 +38,7 @@ class WpUserPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function deleteWpUser(User $user): Response
+    public function delete(User $user): Response
     {
         return $this->checkIfUserIsAdmin($user);
     }
