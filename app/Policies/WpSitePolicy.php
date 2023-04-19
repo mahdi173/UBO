@@ -38,7 +38,7 @@ class WpSitePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function deleteWpSite(User $user): Response
+    public function delete(User $user): Response
     {
         return $this->checkIfUserIsAdmin($user);
     }
