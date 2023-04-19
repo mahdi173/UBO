@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTypeRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdateTypeRequest;
+use App\Models\Type;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Gate;
 
 class TypeController extends Controller
 {    
@@ -78,12 +80,9 @@ class TypeController extends Controller
      */
     public function destroy(string $id)
     {
-        try {
-            $this->authorize('delete', Type::class);
-        }catch (AuthorizationException){
+        if (Gate::denies('delete', Type::findOrFail($id))) {
             abort(403);
-        }
+        } 
         return $this->repository->delete($id);
     }
-
 }
