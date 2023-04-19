@@ -9,6 +9,7 @@ use App\Services\WpSiteService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class WpSiteController extends Controller
@@ -81,9 +82,9 @@ class WpSiteController extends Controller
      */
     public function destroy( WpSite $wpSite): JsonResponse
     {
-        if (Gate::denies('delete', $wpSite)) {
-            abort(403);
-        }  
+        if(Auth::user()->cannot('delete', WpSite::class)){
+            abort(403); 
+        } 
         return $this->wpSiteService->deleteWpSite($wpSite);
     }
 
