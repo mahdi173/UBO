@@ -10,6 +10,7 @@ use App\Http\Requests\StorePoleRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdatePoleRequest;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class PoleController extends Controller
@@ -82,8 +83,8 @@ class PoleController extends Controller
      */
     public function destroy(string $id)
     {  
-        if (Gate::denies('delete', Pole::findOrFail($id))) {
-            abort(403);
+        if(Auth::user()->cannot('delete', Type::class)){
+            abort(403); 
         } 
         return $this->repository->delete($id);
     }
