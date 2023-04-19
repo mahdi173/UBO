@@ -54,7 +54,7 @@ class WpRoleRepository implements CrudInterface
      * @param  string $name
      * @return WpRole
      */
-    public function getWpRoleByName(string $name): WpRole|null{
+    public function getWpRoleByName(string $name): ?WpRole{
         return WpRole::where("name", $name)->first();
     }
 }
