@@ -6,11 +6,8 @@ use App\Http\Requests\StoreWpRoleRequest;
 use App\Http\Requests\UpdateWpRoleRequest;
 use App\Models\WpRole;
 use App\Services\WpRoleService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class WpRoleController extends Controller
 {
@@ -42,9 +39,8 @@ class WpRoleController extends Controller
      */
     public function store(StoreWpRoleRequest $request): JsonResponse
     {
-        if ($request->user()->cannot('createWpRole', WpRole::class)) {
-            abort(403);
-        }
+       $this->authorize('createWpRole',  WpRole::class);
+
         return $this->wpRoleService->storeWpRole($request->all());
     }
     
@@ -67,9 +63,8 @@ class WpRoleController extends Controller
      */
     public function update(UpdateWpRoleRequest $request, WpRole $wpRole): JsonResponse
     {
-        if ($request->user()->cannot('updateWpRole', WpRole::class)) {
-            abort(403);
-        }
+        $this->authorize('updateWpRole',  WpRole::class);
+
         return $this->wpRoleService->updateWpRole($request->all(), $wpRole);
     }
         
@@ -81,9 +76,8 @@ class WpRoleController extends Controller
      */
     public function destroy(WpRole $wpRole): JsonResponse
     {
-        if(Auth::user()->cannot('delete', WpRole::class)){
-            abort(403); 
-        }
+        $this->authorize('delete',  WpRole::class);
+
         return $this->wpRoleService->deleteWpRole($wpRole);
     }
 }
