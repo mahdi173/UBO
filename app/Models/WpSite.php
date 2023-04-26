@@ -41,6 +41,10 @@ class WpSite extends Model
                     ->withPivot(['roles', 'username'])
                     ->wherePivotNull('deleted_at');
     }
+
+    protected $casts = [
+        'roles' => 'array'
+    ];
     
     /**
      * pole

@@ -60,9 +60,8 @@ class WpUserService
     public function getWpUser(WpUser $wpUser): JsonResponse
     {
         $response= new stdClass();
-
         $response->user= $this->wpUserRepository->getById($wpUser->id);
-        
+       
         return response()->json($response);
     }
 
