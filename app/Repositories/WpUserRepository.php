@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Interfaces\CrudInterface;
 use App\Models\WpUser;
-use Illuminate\Support\Facades\DB;
 
 class WpUserRepository implements CrudInterface 
 {        
@@ -66,22 +65,18 @@ class WpUserRepository implements CrudInterface
      * @return mixed
      */
     public function getById(int $id): mixed{
-        return WpUser::with(['sites'=> function($query){
-            $query->select(DB::raw('DISTINCT(wp_sites.id), wp_sites.*'));
-        }, "sites.roles"=> function($query) use ($id){
-            $query->whereIn('wp_role_id', function( $query)  use ($id){
-                $query->select('wp_role_id')->where('wp_user_id', $id);    
-            });
+        return WpUser::with(['sites' => function ($query) {
+            $query->select('wp_sites.*', 'roles', 'username');
         }])->find($id);
     }
 
     /**
-     * getWpUserByUsername
+     * getWpUserByEmail
      *
-     * @param  string $name
+     * @param  string $email
      * @return WpUser
      */
-    public function getWpUserByUsername(string $name): WpUser|null{
-        return WpUser::where("userName", $name)->first();
+    public function getWpUserByEmail(string $email): ?WpUser{
+        return WpUser::where("email", $email)->first();
     }
 }
