@@ -24,6 +24,10 @@ class WpUser extends Model
         'email',
         'password'
     ];
+    protected $casts = [
+        'roles' => 'array',
+    ];
+
     
     /**
      * hidden
