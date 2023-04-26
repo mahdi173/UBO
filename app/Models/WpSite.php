@@ -23,6 +23,7 @@ class WpSite extends Model
         'pole_id',
         'type_id'
     ];
+    
     protected $hidden = ['pole_id', 'type_id'];
 
     /**
@@ -36,7 +37,7 @@ class WpSite extends Model
 
     public function users()
     {
-        return $this->belongsToMany(WpSite::class, 'user_site')
+        return $this->belongsToMany(WpUser::class, 'user_site')
                     ->withPivot(['roles', 'username'])
                     ->wherePivotNull('deleted_at');
     }
