@@ -24,6 +24,7 @@ class WpSite extends Model
         'type_id'
     ];
     protected $hidden = ['pole_id', 'type_id'];
+
     /**
      * type
      *
@@ -31,6 +32,13 @@ class WpSite extends Model
      */
     public function type(){
         return $this->belongsTo(Type::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(WpSite::class, 'user_site')
+                    ->withPivot(['roles', 'username'])
+                    ->wherePivotNull('deleted_at');
     }
     
     /**
@@ -40,33 +48,6 @@ class WpSite extends Model
      */
     public function pole(){
         return $this->belongsTo(Pole::class);
-    }
-    
-    /**
-     * wpUserSiteRole
-     *
-     * @return void
-     */
-    public function wpUserSiteRole() {
-        return $this->hasMany(WpUserSiteRole::class);
-    }
-    
-    /**
-     * roles
-     *
-     * @return void
-     */
-    public function roles() {
-        return $this->belongsToMany(WpRole::class, 'wp_user_site_roles');
-    }
-    
-    /**
-     * users
-     *
-     * @return void
-     */
-    public function users() {
-        return $this->belongsToMany(WpUser::class, 'wp_user_site_roles');
     }
     
     /**
