@@ -9,6 +9,6 @@ trait CheckIfUserIsAdminTrait
     public function  checkIfUserIsAdmin($user): Response{
         return $user->isAdmin()
             ? Response::allow()
-            : Response::denyWithStatus(401);
+            : Response::denyWithStatus(403);
     }
 }

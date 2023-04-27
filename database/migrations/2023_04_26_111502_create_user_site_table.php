@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wp_user_site_roles', function (Blueprint $table) {
+        Schema::create('user_site', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('wp_user_id');
             $table->foreign('wp_user_id')->references('id')->on('wp_users')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('wp_site_id');
             $table->foreign('wp_site_id')->references('id')->on('wp_sites')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedBigInteger('wp_role_id');
-            $table->foreign('wp_role_id')->references('id')->on('wp_roles')->onDelete('restrict')->onUpdate('restrict');
             $table->softDeletes(); 
+            $table->json("roles");
+            $table->string("username");
+            $table->string('etat')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wp_user_site_roles');
+        Schema::dropIfExists('user_site');
     }
 };

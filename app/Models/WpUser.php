@@ -12,7 +12,6 @@ class WpUser extends Model
 {
     use HasFactory, SoftDeletes;
     
-    
     /**
      * fillable
      *
@@ -35,34 +34,18 @@ class WpUser extends Model
         'password',
         'remember_token',
     ];
-    
-    /**
-     * wpUserSiteRole
-     *
-     * @return void
-     */
-    public function wpUserSiteRole() {
-        return $this->hasMany(WpUserSiteRole::class);
-    }
-    
+        
     /**
      * sites
      *
-     * @return void
      */
-    public function sites() {
-        return $this->belongsToMany(WpSite::class, 'wp_user_site_roles');
-    }    
-
-    /**
-     * roles
-     *
-     * @return void
-     */
-    public function roles() {
-        return $this->belongsToMany(WpRole::class, 'wp_user_site_roles');
+    public function sites()
+    {
+        return $this->belongsToMany(WpSite::class, 'user_site')
+                    ->withPivot(['roles', 'username'])
+                    ->wherePivotNull('deleted_at');
     }
-    
+
     /**
      * logs
      *

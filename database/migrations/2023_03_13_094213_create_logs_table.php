@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('action');
             $table->json('json_detail');
-            $table->string('modified_model');
+            $table->string('loggable_type');
             $table->integer('loggable_id');
             $table->string('status');
             $table->softDeletes(); 
