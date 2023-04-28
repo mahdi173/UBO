@@ -23,5 +23,4 @@ class Log extends Model
     {
         return $this->morphTo();
     }
-
 }
