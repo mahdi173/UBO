@@ -6,11 +6,8 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -42,9 +39,7 @@ class UserController extends Controller
      */
     public function store(RegisterRequest $request): JsonResponse
     {
-        if ($request->user()->cannot('create', User::class)) {
-            abort(403);
-        }
+        $this->authorize('create',  User::class);
   
         return  $this->userService->storeUser($request->all());
     }
@@ -58,9 +53,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     { 
-        if ($request->user()->cannot('update', User::class)) {
-            abort(403);
-        }
+        $this->authorize('update',  User::class);
 
         return  $this->userService->updateUser( $user, $request->all());
     }
@@ -83,9 +76,8 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        if(Auth::user()->cannot('delete', WpUser::class)){
-            abort(403); 
-        }
+        $this->authorize('delete',  User::class);
+
         return$this->userService->deleteUser($user);
     }
 }

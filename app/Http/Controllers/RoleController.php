@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreRoleRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdateRoleRequest;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -38,9 +35,8 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        if ($request->user()->cannot('create', Role::class)) {
-            abort(403);
-        }
+        $this->authorize('create',  Role::class);
+
         return $this->repository->add($request);
     }
     
@@ -62,9 +58,8 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, string $id)
     {
-        if ($request->user()->cannot('update', Role::class)) {
-            abort(403);
-        }
+        $this->authorize('update',  Role::class);
+
         return $this->repository->update($request,$id);
     }
 
@@ -78,9 +73,8 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        if(Auth::user()->cannot('delete', Type::class)){
-            abort(403); 
-        }
+        $this->authorize('delete',  Role::class);
+
         return $this->repository->delete($id);
     }
 }

@@ -7,9 +7,6 @@ use App\Http\Requests\StoreTypeRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdateTypeRequest;
 use App\Models\Type;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class TypeController extends Controller
 {    
@@ -42,9 +39,8 @@ class TypeController extends Controller
      */
     public function store(StoreTypeRequest $request)
     {
-        if ($request->user()->cannot('update', Type::class)) {
-            abort(403);
-        }
+        $this->authorize('create',  Type::class);
+
         return $this->repository->add($request);
     }
 
@@ -66,9 +62,8 @@ class TypeController extends Controller
      */
     public function update(UpdateTypeRequest $request, string $id)
     {
-        if ($request->user()->cannot('update', Type::class)) {
-            abort(403);
-        }
+        $this->authorize('update',  Type::class);
+
         return $this->repository->update($request,$id);
     }
         
@@ -81,9 +76,8 @@ class TypeController extends Controller
      */
     public function destroy(string $id)
     {
-        if(Auth::user()->cannot('delete', Type::class)){
-            abort(403); 
-        }
+        $this->authorize('delete',  Type::class);
+
         return $this->repository->delete($id);
     }
 }

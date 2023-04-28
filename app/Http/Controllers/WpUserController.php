@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\StoreWpUserRequest;
 use App\Http\Requests\UpdateWpUserRequest;
 use App\Models\WpUser;
 use App\Services\WpUserService;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class WpUserController extends Controller
 {
@@ -43,9 +39,9 @@ class WpUserController extends Controller
      */
     public function store(StoreWpUserRequest $request): JsonResponse
     {
-        if ($request->user()->cannot('createWpUser', WpUser::class)) {
-            abort(403);
-        }
+        $this->authorize('createWpUser',  WpUser::class);
+
+       // return  $this->wpUserService->storeWpUser($request->all(), $request->sites);
         return  $this->wpUserService->storeWpUser($request->all());
     }
         
@@ -68,9 +64,8 @@ class WpUserController extends Controller
      */
     public function update(UpdateWpUserRequest $request, WpUser $wpUser): JsonResponse
     { 
-        if ($request->user()->cannot('updateWpUser', WpUser::class)) {
-            abort(403);
-        }
+        $this->authorize('updateWpUser',  WpUser::class);
+
         return  $this->wpUserService->updateWpUser($request->all(), $wpUser);
     }
     
@@ -82,9 +77,8 @@ class WpUserController extends Controller
      */
     public function destroy(WpUser $wpUser): JsonResponse
     {
-        if(Auth::user()->cannot('delete', WpUser::class)){
-            abort(403); 
-        }
+        $this->authorize('delete',  WpUser::class);
+
         return$this->wpUserService->deleteWpUser($wpUser);
     }
 }
