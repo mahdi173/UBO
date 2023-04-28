@@ -2,6 +2,8 @@
 
 namespace App\Observers;
 
+use App\Enum\ActionsEnum;
+use App\Enum\StatusEnum;
 use App\Models\User;
 use App\Traits\CreateLogInstanceTrait;
 
@@ -14,7 +16,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $log= $this->createLog( "Create", "OK", json_encode($user));
+        $log= $this->createLog( ActionsEnum::CREATE->value, StatusEnum::SUCCESS->value, json_encode($user));
 
         $user->logs()->save($log);
     }
@@ -24,7 +26,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        $log= $this->createLog( "Update", "OK", json_encode($user));
+        $log= $this->createLog( ActionsEnum::UPDATE->value, StatusEnum::SUCCESS->value, json_encode($user));
 
         $user->logs()->save($log);
     }
@@ -34,24 +36,8 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        $log= $this->createLog( "Delete", "OK", json_encode($user));
+        $log= $this->createLog( ActionsEnum::DELETE->value, StatusEnum::SUCCESS->value, json_encode($user));
 
         $user->logs()->save($log);
-    }
-
-    /**
-     * Handle the User "restored" event.
-     */
-    public function restored(User $user): void
-    {
-        //
-    }
-
-    /**
-     * Handle the User "force deleted" event.
-     */
-    public function forceDeleted(User $user): void
-    {
-        //
     }
 }

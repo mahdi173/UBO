@@ -2,6 +2,8 @@
 
 namespace App\Observers;
 
+use App\Enum\ActionsEnum;
+use App\Enum\StatusEnum;
 use App\Models\WpSite;
 use App\Traits\CreateLogInstanceTrait;
 
@@ -14,7 +16,7 @@ class WpSiteObserver
      */
     public function created(WpSite $wpSite): void
     {
-        $log= $this->createLog( "Create", "OK", json_encode($wpSite));      
+        $log= $this->createLog( ActionsEnum::CREATE->value,  StatusEnum::SUCCESS->value, json_encode($wpSite));      
 
         $wpSite->logs()->save($log);
     }
@@ -24,7 +26,7 @@ class WpSiteObserver
      */
     public function updated(WpSite $wpSite): void
     {
-        $log= $this->createLog( "Update", "OK", json_encode($wpSite));
+        $log= $this->createLog( ActionsEnum::UPDATE->value,  StatusEnum::SUCCESS->value, json_encode($wpSite));
 
         $wpSite->logs()->save($log);
     }
@@ -34,24 +36,8 @@ class WpSiteObserver
      */
     public function deleted(WpSite $wpSite): void
     {
-        $log= $this->createLog( "Delete", "OK", json_encode($wpSite));
+        $log= $this->createLog( ActionsEnum::DELETE->value,  StatusEnum::SUCCESS->value, json_encode($wpSite));
 
         $wpSite->logs()->save($log);
-    }
-
-    /**
-     * Handle the WpSite "restored" event.
-     */
-    public function restored(WpSite $wpSite): void
-    {
-        //
-    }
-
-    /**
-     * Handle the WpSite "force deleted" event.
-     */
-    public function forceDeleted(WpSite $wpSite): void
-    {
-        //
     }
 }
