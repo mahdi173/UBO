@@ -1,11 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PoleController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\TypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     require base_path("app/Modules/Types/routes/typeRoutes.php");
     require base_path("app/Modules/Roles/routes/roleRoutes.php");
 
+    Route::get('/logs', [LogController::class, 'index']);
 });
 
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
