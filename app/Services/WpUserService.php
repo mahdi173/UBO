@@ -4,15 +4,12 @@ namespace App\Services;
 
 use App\Models\WpUser;
 use App\Repositories\WpUserRepository;
-use App\Traits\CreateLogInstanceTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use stdClass;
 
 class WpUserService
 {       
-    use CreateLogInstanceTrait;
-
     /**
      * __construct
      *
@@ -60,7 +57,7 @@ class WpUserService
     public function getWpUser(WpUser $wpUser): JsonResponse
     {
         $response= new stdClass();
-        $response->user= $this->wpUserRepository->getById($wpUser->id);
+        $response= $this->wpUserRepository->getById($wpUser->id);
        
         return response()->json($response);
     }

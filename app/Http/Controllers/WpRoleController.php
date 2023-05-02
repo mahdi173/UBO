@@ -39,7 +39,7 @@ class WpRoleController extends Controller
      */
     public function store(StoreWpRoleRequest $request): JsonResponse
     {
-       $this->authorize('createWpRole',  WpRole::class);
+        $this->authorize('view');
 
         return $this->wpRoleService->storeWpRole($request->all());
     }
@@ -63,7 +63,7 @@ class WpRoleController extends Controller
      */
     public function update(UpdateWpRoleRequest $request, WpRole $wpRole): JsonResponse
     {
-        $this->authorize('updateWpRole',  WpRole::class);
+        $this->authorize('view');
 
         return $this->wpRoleService->updateWpRole($request->all(), $wpRole);
     }
@@ -76,7 +76,7 @@ class WpRoleController extends Controller
      */
     public function destroy(WpRole $wpRole): JsonResponse
     {
-        $this->authorize('delete',  WpRole::class);
+        $this->authorize('view');
 
         return $this->wpRoleService->deleteWpRole($wpRole);
     }
