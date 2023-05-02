@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pole;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePoleRequest;
@@ -39,7 +38,7 @@ class PoleController extends Controller
      */
     public function store(StorePoleRequest $request)
     {     
-        $this->authorize('create',  Pole::class);
+        $this->authorize('view');
 
         return $this->repository->add($request);
     }
@@ -62,7 +61,7 @@ class PoleController extends Controller
      */
     public function update(UpdatePoleRequest $request, string $id)
     {
-        $this->authorize('update',  Pole::class);
+        $this->authorize('view');
 
          return $this->repository->update($request,$id);       
     }
@@ -77,11 +76,8 @@ class PoleController extends Controller
      */
     public function destroy(string $id)
     {  
-        $this->authorize('delete',  Pole::class);
+        $this->authorize('view');
 
         return $this->repository->delete($id);
     }
-    
-    
- 
 }

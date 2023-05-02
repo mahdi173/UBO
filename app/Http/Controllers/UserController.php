@@ -39,7 +39,7 @@ class UserController extends Controller
      */
     public function store(RegisterRequest $request): JsonResponse
     {
-        $this->authorize('create',  User::class);
+        $this->authorize('view');
   
         return  $this->userService->storeUser($request->all());
     }
@@ -53,7 +53,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     { 
-        $this->authorize('update',  User::class);
+        $this->authorize('view');
 
         return  $this->userService->updateUser( $user, $request->all());
     }
@@ -76,7 +76,7 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        $this->authorize('delete',  User::class);
+        $this->authorize('view');
 
         return$this->userService->deleteUser($user);
     }

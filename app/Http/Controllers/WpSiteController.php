@@ -39,7 +39,7 @@ class WpSiteController extends Controller
      */
     public function store(StoreWpSiteRequest $request): JsonResponse
     {
-        $this->authorize('createWpSite',  WpSite::class);
+        $this->authorize('view');
 
         return $this->wpSiteService->storeWpSite($request->all());
     }
@@ -63,7 +63,7 @@ class WpSiteController extends Controller
      */
     public function update(UpdateWpSiteRequest $request, WpSite $wpSite): JsonResponse
     {
-        $this->authorize('updateWpSite',  WpSite::class);
+        $this->authorize('view');
 
         return  $this->wpSiteService->updateWpSite($request->all(), $wpSite);
     }
@@ -77,7 +77,7 @@ class WpSiteController extends Controller
      */
     public function destroy( WpSite $wpSite): JsonResponse
     {
-        $this->authorize('delete',  WpSite::class);
+        $this->authorize('view');
 
         return $this->wpSiteService->deleteWpSite($wpSite);
     }

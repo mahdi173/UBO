@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTypeRequest;
 use App\Repository\RepositoryInterface;
 use App\Http\Requests\UpdateTypeRequest;
-use App\Models\Type;
 
 class TypeController extends Controller
 {    
@@ -39,7 +38,7 @@ class TypeController extends Controller
      */
     public function store(StoreTypeRequest $request)
     {
-        $this->authorize('create',  Type::class);
+        $this->authorize('view');
 
         return $this->repository->add($request);
     }
@@ -62,7 +61,7 @@ class TypeController extends Controller
      */
     public function update(UpdateTypeRequest $request, string $id)
     {
-        $this->authorize('update',  Type::class);
+        $this->authorize('view');
 
         return $this->repository->update($request,$id);
     }
@@ -76,7 +75,7 @@ class TypeController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->authorize('delete',  Type::class);
+        $this->authorize('view');
 
         return $this->repository->delete($id);
     }

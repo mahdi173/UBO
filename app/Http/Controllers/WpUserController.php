@@ -39,7 +39,7 @@ class WpUserController extends Controller
      */
     public function store(StoreWpUserRequest $request): JsonResponse
     {
-        $this->authorize('createWpUser',  WpUser::class);
+        $this->authorize('view');
 
        // return  $this->wpUserService->storeWpUser($request->all(), $request->sites);
         return  $this->wpUserService->storeWpUser($request->all());
@@ -64,7 +64,7 @@ class WpUserController extends Controller
      */
     public function update(UpdateWpUserRequest $request, WpUser $wpUser): JsonResponse
     { 
-        $this->authorize('updateWpUser',  WpUser::class);
+        $this->authorize('view');
 
         return  $this->wpUserService->updateWpUser($request->all(), $wpUser);
     }
@@ -77,7 +77,7 @@ class WpUserController extends Controller
      */
     public function destroy(WpUser $wpUser): JsonResponse
     {
-        $this->authorize('delete',  WpUser::class);
+        $this->authorize('view');
 
         return$this->wpUserService->deleteWpUser($wpUser);
     }

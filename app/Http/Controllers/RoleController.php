@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreRoleRequest;
 use App\Repository\RepositoryInterface;
@@ -35,7 +34,7 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $this->authorize('create',  Role::class);
+        $this->authorize('view');
 
         return $this->repository->add($request);
     }
@@ -58,7 +57,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, string $id)
     {
-        $this->authorize('update',  Role::class);
+        $this->authorize('view');
 
         return $this->repository->update($request,$id);
     }
@@ -73,7 +72,7 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->authorize('delete',  Role::class);
+        $this->authorize('view');
 
         return $this->repository->delete($id);
     }

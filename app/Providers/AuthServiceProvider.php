@@ -4,6 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -23,10 +25,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies();
-
-        Gate::define('delete', function ($user, $model) {
-            return $user->can('delete', $model);
+        Gate::define('view', function (User $user) {
+            return $user->isAdmin()
+            ? Response::allow()
+            : Response::denyWithStatus(403);
         });
     }
 }
