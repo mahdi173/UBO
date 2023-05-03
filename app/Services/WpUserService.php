@@ -35,10 +35,19 @@ class WpUserService
      * @param  array $data
      * @return JsonResponse
      */
-    public function storeWpUser(array $data): JsonResponse 
+    public function storeWpUser(array $data, array $sites): JsonResponse 
     { 
         $wpUser = $this->wpUserRepository->create($data);
         
+        foreach($sites as $site){
+            $this->userSiteService->attach($site["id"],  $wpUser, [ 'roles'=> json_encode($site["roles"]), 
+                                                                    'username'=> $wpUser->userName,
+                                                                    'etat'=> ActionsEnum::CREATE->value,
+                                                                    'created_at'=> Carbon::now(),
+                                                                    'updated_at'=> Carbon::now()                   
+                                                                    ]);
+        }
+
         return response()->json($wpUser, 200);
     }
     
