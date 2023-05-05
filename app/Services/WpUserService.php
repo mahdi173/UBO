@@ -35,11 +35,24 @@ class WpUserService
      * @param  array $data
      * @return JsonResponse
      */
-    public function storeWpUser(array $data, array $sites): JsonResponse 
+    public function storeWpUser(array $data): JsonResponse 
     { 
         $wpUser = $this->wpUserRepository->create($data);
+    
+        return response()->json($wpUser, 200);
+    }
+     
+    /**
+     * affectSites
+     *
+     * @param  array $data
+     * @return JsonResponse
+     */
+    public function affectSites(array $data): JsonResponse 
+    { 
+        $wpUser = $this->wpUserRepository->findById($data['id']);
         
-        foreach($sites as $site){
+        foreach($data['sites'] as $site){
             $this->userSiteService->attach($site["id"],  $wpUser, [ 'roles'=> json_encode($site["roles"]), 
                                                                     'username'=> $wpUser->userName,
                                                                     'etat'=> ActionsEnum::CREATE->value,
@@ -48,7 +61,7 @@ class WpUserService
                                                                     ]);
         }
 
-        return response()->json($wpUser, 200);
+        return response()->json("Sites successfully added to user", 200);
     }
     
     /**

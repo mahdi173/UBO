@@ -84,4 +84,14 @@ class WpUserRepository implements CrudInterface
     public function getWpUserByEmail(string $email): ?WpUser{
         return WpUser::where("email", $email)->first();
     }
+
+    /**
+     * findById
+     *
+     * @param  int $id
+     * @return mixed
+     */
+    public function findById(int $id): ?WpUser{
+        return WpUser::where("id", $id)->first();
+    }
 }
