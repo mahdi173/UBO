@@ -5,10 +5,11 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Pole;
 use App\Models\Type;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\WpSite>
  */
- 
+
 class WpSiteFactory extends Factory
 {
     /**
@@ -20,9 +21,9 @@ class WpSiteFactory extends Factory
     {
         return [
             'name' => fake()->name,
-            'domain' => $this->faker->text(),
-            "pole_id" => 1,
-            "type_id" => 1
+            'domain' => fake()->text(),
+            'pole_id' => Pole::inRandomOrder()->first()->id,
+            'type_id' => Type::inRandomOrder()->first()->id
         ];
     }
 }
