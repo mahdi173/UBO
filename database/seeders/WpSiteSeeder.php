@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\WpSite;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,14 +13,9 @@ class WpSiteSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\WpSite::factory(4)
-        //     ->has(
-        //         \App\Models\Pole::factory(1)
-        //     )
-        //     ->has(
-        //          \App\Models\Type::factory(1)
-        //     )
-
-        // ->create();
+        $dispatcher = WpSite::getEventDispatcher();
+        WpSite::unsetEventDispatcher($dispatcher);
+        WpSite::factory(50)->create();
+        WpSite::setEventDispatcher($dispatcher);
     }
 }

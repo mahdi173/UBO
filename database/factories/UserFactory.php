@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,8 +24,8 @@ class UserFactory extends Factory
             'lastName' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => bcrypt('secret'),
-            'role_id'=> 1
+            'password' => bcrypt('password'),
+            'role_id' => Role::inRandomOrder()->first()->id,
         ];
     }
 

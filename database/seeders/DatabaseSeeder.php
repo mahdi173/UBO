@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\User;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 
@@ -15,21 +16,30 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        Role::create(
+        Role::create(['name' => "admin",]);
+        Role::create(['name' => "manager",]);
+        Role::create(['name' => "user",]);
+
+        $dispatcher = User::getEventDispatcher();
+        User::unsetEventDispatcher($dispatcher);
+        // Create Admin
+        $adminRoleId = Role::where('name', 'admin')->first()->id;
+        User::firstOrCreate(
+            ['email' => "admin@email.com"],
             [
-                'name' => "admin",
+                'role_id' => $adminRoleId,
+                'password' => bcrypt('admin')
             ]
         );
-        // \App\Models\User::factory(10)->create();
-        // \App\Models\WpRole::factory(3)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-       $this->call(WpRoleSeeder::class);
-       $this->call(WpUserSeeder::class);
-       $this->call(WpSiteSeeder::class);
-     
+        User::factory()->count(3)->create();
+        User::setEventDispatcher($dispatcher);
+
+        $this->call(WpRoleSeeder::class);
+        $this->call(WpUserSeeder::class);
+        $this->call(PoleSeeder::class);
+        $this->call(TypeSeeder::class);
+        $this->call(WpSiteSeeder::class);
+        $this->call(LogSeeder::class);
     }
 }

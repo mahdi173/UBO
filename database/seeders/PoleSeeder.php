@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Pole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,9 @@ class PoleSeeder extends Seeder
      */
     public function run(): void
     {
-       //  \App\Models\Pole::factory(1)->create();
+        $dispatcher = Pole::getEventDispatcher();
+        Pole::unsetEventDispatcher($dispatcher);
+        Pole::factory(10)->create();
+        Pole::setEventDispatcher($dispatcher);
     }
 }

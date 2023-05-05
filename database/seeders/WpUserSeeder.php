@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\WpUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,9 @@ class WpUserSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\WpUser::factory(2)->create();
+        $dispatcher = WpUser::getEventDispatcher();
+        WpUser::unsetEventDispatcher($dispatcher);
+        WpUser::factory(10)->create();
+        WpUser::setEventDispatcher($dispatcher);
     }
 }

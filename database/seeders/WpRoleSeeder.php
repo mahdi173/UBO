@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\WpRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,9 @@ class WpRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\WpRole::factory(3)->create();
-
+        $dispatcher = WpRole::getEventDispatcher();
+        WpRole::unsetEventDispatcher($dispatcher);
+        WpRole::factory(10)->create();
+        WpRole::setEventDispatcher($dispatcher);
     }
 }
