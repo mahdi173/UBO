@@ -27,9 +27,14 @@ class WpUserRepository implements CrudInterface
         if(isset($data['password'])){
             $password= $data['password'];
         }
+        
+        $username= $data['email'];
+        if(isset($data['userName'])){
+            $username= $data['userName'];
+        }
 
         return WpUser::create([
-            'userName' => $data['email'],
+            'userName' => $username,
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],
@@ -78,5 +83,15 @@ class WpUserRepository implements CrudInterface
      */
     public function getWpUserByEmail(string $email): ?WpUser{
         return WpUser::where("email", $email)->first();
+    }
+
+    /**
+     * findById
+     *
+     * @param  int $id
+     * @return mixed
+     */
+    public function findById(int $id): ?WpUser{
+        return WpUser::where("id", $id)->first();
     }
 }

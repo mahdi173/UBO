@@ -41,8 +41,19 @@ class WpUserController extends Controller
     {
         $this->authorize('view');
 
-       // return  $this->wpUserService->storeWpUser($request->all(), $request->sites);
         return  $this->wpUserService->storeWpUser($request->all());
+    }
+    
+    /**
+     * affectSitesToUser
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function affectSitesToUser(Request $request): JsonResponse{
+        $this->authorize('view');
+        
+        return  $this->wpUserService->affectSites($request->all());
     }
         
     /**

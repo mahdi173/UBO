@@ -13,11 +13,11 @@ class UserSite extends Pivot
 
     public function user()
     {
-        return $this->belongsTo(WpUser::class);
+        return $this->belongsTo(WpUser::class, 'wp_user_id');
     }
 
     public function site()
     {
-        return $this->belongsTo(WpSite::class);
+        return $this->belongsTo(WpSite::class, 'wp_site_id');
     }
 }
