@@ -62,14 +62,14 @@ class UserController extends Controller
     }
     
     /**
-     * resetPassword
+     * createPassword
      *
      * @param  Request $request
      * @return JsonResponse
      */
-    public function resetPassword(Request $request): JsonResponse
+    public function createPassword(Request $request): JsonResponse
     {
-       return $this->userService->resetUserPassword($request->all());   
+       return $this->userService->createUserPassword($request->all());   
     }
 
     /**

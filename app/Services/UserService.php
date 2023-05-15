@@ -121,19 +121,19 @@ class UserService
         $user= User::where("id", $user_token->toArray()["tokenable_id"])->first();   
 
         if($user->email_verified_at){
-            return response()->json(['error' => 'Token expired'], 422);
+            return response()->json(['error' => 'Token expired'], 419);
         }
         
         return $user->email;
     }
     
     /**
-     * resetUserPwd
+     * createUserPassword
      *
      * @param  array $data
      * @return JsonResponse
      */
-    public function resetUserPassword(array $data): JsonResponse
+    public function createUserPassword(array $data): JsonResponse
     {
         $response= $this->verifyUserToken($data["token"]);
 

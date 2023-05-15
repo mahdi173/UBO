@@ -214,4 +214,16 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vue Application Port
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the port value of the vue.js application.
+    | Set this in your ".env" file.
+    |
+    */
+
+    'vue_port' => env('VUE_PORT'),
 ];

@@ -38,6 +38,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::post('users/verify-token', [UserController::class, 'verifyToken'])->middleware('verify.email');
-Route::post('users/reset-password', [UserController::class, 'resetPassword'])->middleware('verify.email');
+Route::post('users/create-password', [UserController::class, 'createPassword'])->middleware('verify.email');
 
 Route::post('/login', [AuthController::class, 'login']);
