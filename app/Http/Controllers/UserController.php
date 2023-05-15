@@ -43,6 +43,34 @@ class UserController extends Controller
   
         return  $this->userService->storeUser($request->all());
     }
+    
+    /**
+     * verifyToken
+     *
+     * @param  Request $request
+     * @return JsonResponse
+     */
+    public function verifyToken(Request $request): JsonResponse
+    {
+        $response= $this->userService->verifyUserToken($request->token);
+        
+        if(gettype($response)=="string"){
+            return response()->json(['message' => 'Token is verified']);
+        }
+
+       return $response;   
+    }
+    
+    /**
+     * createPassword
+     *
+     * @param  Request $request
+     * @return JsonResponse
+     */
+    public function createPassword(Request $request): JsonResponse
+    {
+       return $this->userService->createUserPassword($request->all());   
+    }
 
     /**
      * update

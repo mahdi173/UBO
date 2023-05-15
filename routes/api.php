@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\WpUserController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,5 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/logs', [LogController::class, 'index']);
 });
+
+Route::post('users/verify-token', [UserController::class, 'verifyToken'])->middleware('verify.email');
+Route::post('users/create-password', [UserController::class, 'createPassword'])->middleware('verify.email');
 
 Route::post('/login', [AuthController::class, 'login']);

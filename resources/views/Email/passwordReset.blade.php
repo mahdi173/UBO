@@ -1,9 +1,7 @@
 <x-mail::message>
-# Introduction
-
 The body of your message.
 
-@component('mail::button', ['url' => 'http://localhost:80/reset-password/'. $token])
+@component('mail::button', ['url' => 'http://localhost:'.config('app.vue_port').'/resetpassword/'. $token])
 Reset Password
 @endcomponent
 
