@@ -23,8 +23,6 @@ class UserFactory extends Factory
             'firstName' => fake()->name(),
             'lastName' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => bcrypt('password'),
             'role_id' => Role::inRandomOrder()->first()->id,
         ];
     }

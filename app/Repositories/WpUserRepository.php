@@ -22,12 +22,7 @@ class WpUserRepository implements CrudInterface
      * @param  array $data
      * @return WpUser
      */
-    public function create(array $data): WpUser {
-        $password= bcrypt("123456789");
-        if(isset($data['password'])){
-            $password= $data['password'];
-        }
-        
+    public function create(array $data): WpUser {  
         $username= $data['email'];
         if(isset($data['userName'])){
             $username= $data['userName'];
@@ -37,8 +32,7 @@ class WpUserRepository implements CrudInterface
             'userName' => $username,
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
-            'email' => $data['email'],
-            'password' => $password
+            'email' => $data['email']
         ]);
     }
     
