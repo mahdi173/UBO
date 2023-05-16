@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
         User::unsetEventDispatcher($dispatcher);
         // Create Admin
         $adminRoleId = Role::where('name', 'admin')->first()->id;
-        User::firstOrCreate(
-            ['email' => "admin@email.com"],
+        User::factory()->create(
             [
                 'role_id' => $adminRoleId,
-                'password' => bcrypt('admin')
+                'password' => bcrypt('admin'),
+                'email' => "admin@email.com"
             ]
         );
 

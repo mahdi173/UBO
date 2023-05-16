@@ -35,7 +35,6 @@ class UserRepository implements UserRepositoryInterface, CrudInterface
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'email' => $data['email'],
-            'password' => bcrypt(Str::random(12)),
             'role_id'=> $roleId
         ]);
     }
