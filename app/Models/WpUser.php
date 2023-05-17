@@ -59,8 +59,16 @@ class WpUser extends Model
     {
         return $this->morphMany(Log::class, 'loggable');
     }
-
-    public function scopeFilter($query, ?array $filters, ?array $sort, $paginate)
+    
+    /**
+     * scopeFilter
+     *
+     * @param  mixed $query
+     * @param  ?array $filters
+     * @param  ?array $sort
+     * @return void
+     */
+    public function scopeFilter($query, ?array $filters, ?array $sort)
     {
         if(is_array($filters)){
             foreach ($filters as $filter => $value) {
@@ -114,10 +122,6 @@ class WpUser extends Model
                    };
                }
            );
-        }
-
-        if($paginate){
-            $query=  $query->paginate($paginate);
         }
 
         return $query;

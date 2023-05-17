@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\Filters\WpRoleFilters;
 use App\Models\WpRole;
 use App\Repositories\WpRoleRepository;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use stdClass;
 
 class WpRoleService
 {     
@@ -62,16 +61,20 @@ class WpRoleService
      * filter
      *
      * @param  Request $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function filter(Request $request): JsonResponse
+    public function filter(Request $request): mixed
     {
-        $results= WpRole::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
+        $response= new stdClass();
+
+        $filter= WpRole::filter($request->input('filters'),$request->input('sort'));
 
         if(!$request->paginate){
-            return  response()->json(["data"=> $results->get()]);
+            $response->data= $filter->get();
         }else{
-            return response()->json($results);
+            $response= $filter->paginate($request->paginate);
         }
+
+        return $response;
     }
 }

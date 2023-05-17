@@ -60,8 +60,8 @@ class WpUserService
                                                                     'updated_at'=> Carbon::now()                   
                                                                     ]);
         }
-
-        return response()->json("Sites successfully added to user", 200);
+        
+        return response()->json(["msg"=>"Sites successfully added to user"], 200);
     }
     
     /**
@@ -110,17 +110,21 @@ class WpUserService
      * filter
      *
      * @param  Request $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function filter(Request $request): JsonResponse
+    public function filter(Request $request): mixed
     {           
-        $results= WpUser::filter($request->input('filters'),$request->input('sort') ,$request->paginate);
+        $response= new stdClass();
+
+        $filter= WpUser::filter($request->input('filters'),$request->input('sort'));
 
         if(!$request->paginate){
-            return  response()->json(["data"=> $results->get()]);
+            $response->data= $filter->get();
         }else{
-            return response()->json($results);
+            $response= $filter->paginate($request->paginate);
         }
+
+        return $response;
     }
 
       
