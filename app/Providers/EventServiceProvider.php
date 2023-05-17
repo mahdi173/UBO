@@ -2,18 +2,24 @@
 
 namespace App\Providers;
 
+use App\Models\Pole;
+use App\Models\Role;
+use App\Models\Type;
 use App\Models\User;
 use App\Models\WpRole;
 use App\Models\WpSite;
 use App\Models\WpUser;
+use App\Observers\PoleObserver;
+use App\Observers\RoleObserver;
+use App\Observers\TypeObserver;
 use App\Observers\UserObserver;
 use App\Observers\WpRoleObserver;
 use App\Observers\WpSiteObserver;
 use App\Observers\WpUserObserver;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -37,6 +43,9 @@ class EventServiceProvider extends ServiceProvider
         WpUser::observe(WpUserObserver::class);
         WpSite::observe(WpSiteObserver::class);
         WpRole::observe(WpRoleObserver::class);
+        Pole::observe(PoleObserver::class);
+        Role::observe(RoleObserver::class);
+        Type::observe(TypeObserver::class);
     }
 
     /**

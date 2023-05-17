@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Log extends Model
 {
@@ -23,6 +24,17 @@ class Log extends Model
     public function loggable(): MorphTo
     {
         return $this->morphTo();
+    }
+    
+    //changer format du date
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:m:s', strtotime($value));
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return date('Y-m-d H:m:s ', strtotime($value));
     }
 
      /**
