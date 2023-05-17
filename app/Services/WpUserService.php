@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enum\ActionsEnum;
+use App\Models\WpSite;
 use App\Models\WpUser;
 use App\Repositories\WpRoleRepository;
 use App\Repositories\WpSiteRepository;
@@ -53,7 +54,7 @@ class WpUserService
         $wpUser = $this->wpUserRepository->findById($data['id']);
         
         foreach($data['sites'] as $site){
-            $this->userSiteService->attach($site["id"],  $wpUser, [ 'roles'=> json_encode($site["roles"]), 
+            $this->userSiteService->attach($site["id"],  $wpUser->id, [ 'roles'=> json_encode($site["roles"]), 
                                                                     'username'=> $wpUser->userName,
                                                                     'etat'=> ActionsEnum::CREATE->value,
                                                                     'created_at'=> Carbon::now(),
@@ -126,8 +127,7 @@ class WpUserService
 
         return $response;
     }
-
-      
+    
     /**
      * getAllWpUsers
      *
@@ -137,66 +137,159 @@ class WpUserService
     {
         $sites=[["name"=>"Mystery Blog", "domain"=>"http://mysteryblog.com"], 
                 ["name"=>"Laracast", "domain"=>"http://ubolaracast.com"]];
-       
+        
+        $key=  config('app.key');
+
+        $data= [
+            "username"=> "kei",
+            "password"=> "Rm9c)ii@pYc77bpXxH",
+            "key"=> $key
+        ];
+
+        Http::accept('application/json')->post('http://mysteryblog.com/wp-json/wp/v2/key', $data);
+        
+        $headers = [
+            'X-Encryption-key' =>$key,
+        ];
+
         foreach($sites as $site){            
-            $keyResponse = Http::accept('application/json')->get($site["domain"].'/wp-json/wp/v2/key');
-            $key= $keyResponse->json();   
-    
-            $headers = [
-                'X-My-Static-Key' =>$key,
-            ];
+            // check if site exist, if not create it
+            $wp_site= $this->getOrCreateSite($site);
 
-            $response = Http::withHeaders($headers)->get($site["domain"].'/wp-json/wp/v2/wp-users');
-
+            $response = Http::withHeaders($headers)->get($wp_site->domain.'/wp-json/wp/v2/wp-users');
+            
             $users =  $response->json();
 
-            $wp_site= $this->wpSiteRepository->getWpSiteByDomain($site["domain"]);
-
-            if(!$wp_site){
-                $wp_site=  $this->wpSiteRepository->create([
-                    "name"=> $site["name"],
-                    "domain"=> $site["domain"],
-                    "type_id"=>1,
-                    "pole_id"=>1
-                ]);                
+            if($response->ok()){
+                // Save wp users in database
+                $this->saveWpUsers($users, $wp_site);
             }
+        }
+    }
+    
+    /**
+     * getOrCreateSite
+     *
+     * @param  mixed $site
+     * @return WpSite
+     */
+    public function getOrCreateSite(mixed $site): WpSite{
+        $wp_site= $this->wpSiteRepository->getWpSiteByDomain($site["domain"]);
 
-            foreach($users as $user){
-                $userRoles=[];
+        if(!$wp_site){
+            //Save wp site in db if it doesn't exist
+            $wp_site=  $this->createSite($site);
+        }
 
-                $wp_user= $this->wpUserRepository->getWpUserByEmail($user["email"]);
-                
-                if(!$wp_user)
+        return $wp_site;
+    }
+    
+    /**
+     * createSite
+     *
+     * @param  mixed $site
+     * @return WpSite
+     */
+    public function createSite($site): WpSite{
+        $new_site=  $this->wpSiteRepository->create([
+            "name"=> $site["name"],
+            "domain"=> $site["domain"],
+            "type_id"=>1,
+            "pole_id"=>1
+        ]); 
+        
+        return $new_site;
+    }
+    
+    /**
+     * saveWpUsers
+     *
+     * @param  array $users
+     * @param  WpSite $site
+     * @return void
+     */
+    public function saveWpUsers(array $users, WpSite $site){
+        foreach($users as $user){
+            $userRoles=[];
+
+            $wp_user= $this->wpUserRepository->getWpUserByEmail($user["email"]);
+           
+            $roles= $user['roles'];
+
+            // check if wp role exist, if not create it
+            $userRoles= $this->getOrCreateRoles($roles);
+
+            if(!$wp_user){
+                //If user doent only have subscriber as role or if it have other roles beside it we save this user in db
+                if(count($roles)==1 && $roles[0]!='subscriber')
                 {
-                   $wp_user=$this->wpUserRepository->create([
-                        "userName"=>$user['username'],
-                        "firstName"=>$user['firstname'],
-                        "lastName"=>$user['lastname'],
-                        "email"=>$user['email'],
-                        "password"=> $user['pass']
-                    ]);
-                }
+                    $new_user= $this->createUser($user);
+                    //Affect sites to wp user
+                    $this->affectSitesToWpUser($site->id, $new_user, $userRoles);
+                }else if (count($roles)>1){ 
+                    $new_user= $this->createUser($user);
+                    $this->affectSitesToWpUser($site->id, $new_user, $userRoles);
+                }   
+            } else{
+                // if user does exist we update his sites
+                $this->affectSitesToWpUser($site->id, $wp_user, $userRoles);
+            }
+        }
+    }
+    
+    /**
+     * getOrCreateRoles
+     *
+     * @param  array $roles
+     * @return array
+     */
+    public function getOrCreateRoles(array $roles): array{
+        $userRoles= [];
+        foreach ($roles as $key => $role) {
+            $existed_role= $this->wpRoleRepository->getWpRoleByName($role);
 
-                $roles= $user['roles'];
+            if(!$existed_role){
+                $new_role= $this->wpRoleRepository->create(["name"=> $role]);
+                $userRoles[]=$new_role->name;
+            }else{
+                $userRoles[]=$existed_role->name;
+            }
+        }
 
-                foreach ($roles as $key => $role) {
-                    $role= $this->wpRoleRepository->getWpRoleByName($role);
+        return $userRoles;
+    }
+    
+    /**
+     * createUser
+     *
+     * @param  mixed $user
+     * @return WpUser
+     */
+    public function createUser($user): WpUser{
+        $new_user=$this->wpUserRepository->create([
+            "userName"=>$user['username'],
+            "firstName"=>$user['firstname'],
+            "lastName"=>$user['lastname'],
+            "email"=>$user['email']
+        ]);
 
-                    if(!$role){
-                        $role= $this->wpRoleRepository->create(["name"=> $role]);
-                    }
-
-                    $userRoles[]=$role->name;
-                }
-
-                $this->userSiteService->attach($wp_site->id, $wp_user, [ 'roles'=>json_encode($userRoles), 
+        return $new_user;
+    }
+    
+    /**
+     * affectSitesToWpUser
+     *
+     * @param  int $site_id
+     * @param  WpUser $wp_user
+     * @param  array $userRoles
+     * @return void
+     */
+    public function affectSitesToWpUser(int $site_id, WpUser $wp_user, array $userRoles){
+        $this->userSiteService->attach($site_id, $wp_user->id, [ 'roles'=>json_encode($userRoles), 
                                                                          'username'=>$wp_user->userName,
-                                                                         'etat'=> ActionsEnum::CREATE->value,
+                                                                         'etat'=> ActionsEnum::FETCH->value,
                                                                          'created_at'=> Carbon::now(),
                                                                          'updated_at'=>Carbon::now()   
-                                                                        ]);           
-            }
-
-        }
+                                                                ]);  
     }
 }
