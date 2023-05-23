@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interfaces\RoleRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Jobs\SendMailJob;
 use App\Mail\SendMailreset;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -11,7 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\PersonalAccessToken;
 use stdClass;
 
@@ -41,8 +41,9 @@ class UserService
         $email= $user->email;
         $user_token= $user->createToken('password-token', ['activate-account']);
 
-        Mail::to($email)->send(new SendMailreset($user_token->accessToken->token, $email));
-
+        $mail= new SendMailreset($user_token->accessToken->token, $email);
+        SendMailJob::dispatch($mail);
+        
         return response()->json([
             'message' => 'User Created Successfully',
             'user' => $user
