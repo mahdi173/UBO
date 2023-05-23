@@ -120,5 +120,46 @@ class WpUserService
         }
 
         return $response;
-    } 
+    }
+
+    
+        /**
+     * showDeletedData
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function showDeletedData(Request $request): mixed{
+        $response= new stdClass();
+
+        $deletedRecords=WpUser::onlyTrashed()->filter(
+
+            $request->input('filters'),
+            $request->input('sort')
+            );
+           if(!$request->paginate){
+            $response->data= $deletedRecords->get();
+
+           }else{
+            $response= $deletedRecords->paginate($request->paginate);
+           }
+
+           return $response;
+    }
+    
+      /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id): JsonResponse{
+        
+        $record = WpUser::withTrashed()->findOrFail($id);
+        $record->restore();
+        return response()->json([
+            'message' => 'User restored successfully',
+            'data' => $record
+        ]);
+} 
 }

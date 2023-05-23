@@ -80,4 +80,24 @@ class PoleController extends Controller
 
         return $this->repository->delete($id);
     }
+
+        
+    /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id){
+        return $this->repository->restore($id);
+    }    
+    /**
+     * showDeletedData
+     *
+     * @return void
+     */
+    public function showDeletedData(Request $request){
+        return $this->repository->showDeletedData($request);
+    }
 }
+

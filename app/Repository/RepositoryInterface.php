@@ -12,4 +12,6 @@ interface RepositoryInterface
     public function delete(string $id);
     public function searchBy(Request $request);
     public function show(string $id);
+    public function restore(string $id);
+    public function showDeletedData(Request $request);
 }

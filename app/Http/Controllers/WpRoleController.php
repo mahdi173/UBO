@@ -80,4 +80,25 @@ class WpRoleController extends Controller
 
         return $this->wpRoleService->deleteWpRole($wpRole);
     }
+    
+    /**
+     * showDeletedData
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function showDeletedData(Request $request) 
+    {
+        return $this->wpRoleService->showDeletedData($request);
+    }
+
+         /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id){
+        return $this->wpRoleService->restore($id);
+    }
 }
