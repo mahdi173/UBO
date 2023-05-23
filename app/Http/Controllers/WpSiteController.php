@@ -86,5 +86,23 @@ class WpSiteController extends Controller
     {
          return $this->wpSiteService->showUsers($wpSite);
     }
+
+    /**
+     * showDeletedData
+     *
+     * @return void
+     */
+    public function showDeletedData(Request $request){
+        return $this->wpSiteService->showDeletedData($request);
+    }
+      /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id){
+        return $this->wpSiteService->restore($id);
+    }
 }
 

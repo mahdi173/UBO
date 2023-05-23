@@ -21,7 +21,7 @@ class WpSiteFactory extends Factory
     {
         return [
             'name' => fake()->name,
-            'domain' => fake()->text(),
+            'domain' => fake()->url(),
             'pole_id' => Pole::inRandomOrder()->first()->id,
             'type_id' => Type::inRandomOrder()->first()->id
         ];

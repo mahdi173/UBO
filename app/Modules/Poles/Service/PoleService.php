@@ -106,4 +106,37 @@ class PoleService implements RepositoryInterface{
             return response()->json($data);
         }
      }
+    
+    /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id): JsonResponse{
+        
+            $record = Pole::withTrashed()->findOrFail($id);
+            $record->restore();
+            return response()->json([
+                'message' => 'pole restored successfully',
+                'data' => $record
+            ]);
+    }    
+    /**
+     * showDeletedData
+     *
+     * @return void
+     */
+    public function showDeletedData(Request $request): JsonResponse{
+        $deletedRecords=Pole::onlyTrashed()->filters(
+         
+            $request->input('filters'),
+            $request->input('sort'),
+            $request->paginate);
+           if(!$request->paginate){
+               return  response()->json(["data"=> $deletedRecords->get()]);
+           }else{
+               return response()->json($deletedRecords);
+           }
+    }
 }

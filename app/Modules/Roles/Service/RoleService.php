@@ -108,7 +108,37 @@ class RoleService implements RepositoryInterface{
          }else{
              return response()->json($data);
          }
-     }
-
-
+     }     
+     /**
+      * restore
+      *
+      * @param  mixed $id
+      * @return JsonResponse
+      */
+     public function restore (string $id): JsonResponse{
+        $record = Role::withTrashed()->findOrFail($id);
+        $record->restore();
+        return response()->json([
+            'message' => 'role restored successfully',
+            'data' => $record
+        ]);
+    }    
+    /**
+     * showDeletedData
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function showDeletedData(Request $request): JsonResponse{
+        $deletedRecords=Role::onlyTrashed()->filters(
+         
+            $request->input('filters'),
+            $request->input('sort'),
+            $request->paginate);
+           if(!$request->paginate){
+               return  response()->json(["data"=> $deletedRecords->get()]);
+           }else{
+               return response()->json($deletedRecords);
+           }
+    }
 }

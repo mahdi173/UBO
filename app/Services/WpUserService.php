@@ -120,5 +120,118 @@ class WpUserService
         }
 
         return $response;
-    } 
+    }
+
+      
+    /**
+     * getAllWpUsers
+     *
+     * @return void
+     */
+    public function getAllWpUsers()
+    {
+        $sites=[["name"=>"Mystery Blog", "domain"=>"http://mysteryblog.com"], 
+                ["name"=>"Laracast", "domain"=>"http://ubolaracast.com"]];
+       
+        foreach($sites as $site){            
+            $keyResponse = Http::accept('application/json')->get($site["domain"].'/wp-json/wp/v2/key');
+            $key= $keyResponse->json();   
+    
+            $headers = [
+                'X-My-Static-Key' =>$key,
+            ];
+
+            $response = Http::withHeaders($headers)->get($site["domain"].'/wp-json/wp/v2/wp-users');
+
+            $users =  $response->json();
+
+            $wp_site= $this->wpSiteRepository->getWpSiteByDomain($site["domain"]);
+
+            if(!$wp_site){
+                $wp_site=  $this->wpSiteRepository->create([
+                    "name"=> $site["name"],
+                    "domain"=> $site["domain"],
+                    "type_id"=>1,
+                    "pole_id"=>1
+                ]);                
+            }
+
+            foreach($users as $user){
+                $userRoles=[];
+
+                $wp_user= $this->wpUserRepository->getWpUserByEmail($user["email"]);
+                
+                if(!$wp_user)
+                {
+                   $wp_user=$this->wpUserRepository->create([
+                        "userName"=>$user['username'],
+                        "firstName"=>$user['firstname'],
+                        "lastName"=>$user['lastname'],
+                        "email"=>$user['email'],
+                        "password"=> $user['pass']
+                    ]);
+                }
+
+                $roles= $user['roles'];
+
+                foreach ($roles as $key => $role) {
+                    $role= $this->wpRoleRepository->getWpRoleByName($role);
+
+                    if(!$role){
+                        $role= $this->wpRoleRepository->create(["name"=> $role]);
+                    }
+
+                    $userRoles[]=$role->name;
+                }
+
+                $this->userSiteService->attach($wp_site->id, $wp_user, [ 'roles'=>json_encode($userRoles), 
+                                                                         'username'=>$wp_user->userName,
+                                                                         'etat'=> ActionsEnum::CREATE->value,
+                                                                         'created_at'=> Carbon::now(),
+                                                                         'updated_at'=>Carbon::now()   
+                                                                        ]);           
+            }
+
+        }
+    }
+
+        /**
+     * showDeletedData
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function showDeletedData(Request $request): mixed{
+        $response= new stdClass();
+
+        $deletedRecords=WpUser::onlyTrashed()->filter(
+
+            $request->input('filters'),
+            $request->input('sort')
+            );
+           if(!$request->paginate){
+            $response->data= $deletedRecords->get();
+
+           }else{
+            $response= $deletedRecords->paginate($request->paginate);
+           }
+
+           return $response;
+    }
+    
+      /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id): JsonResponse{
+        
+        $record = WpUser::withTrashed()->findOrFail($id);
+        $record->restore();
+        return response()->json([
+            'message' => 'User restored successfully',
+            'data' => $record
+        ]);
+} 
 }

@@ -91,5 +91,24 @@ class WpUserController extends Controller
         $this->authorize('view');
 
         return$this->wpUserService->deleteWpUser($wpUser);
+    }    
+    /**
+     * showDeletedData
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function showDeletedData(Request $request) 
+    {
+        return $this->wpUserService->showDeletedData($request);
+    }
+       /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id){
+        return $this->wpUserService->restore($id);
     }
 }
