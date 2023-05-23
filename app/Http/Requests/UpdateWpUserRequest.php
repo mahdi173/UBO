@@ -25,7 +25,7 @@ class UpdateWpUserRequest extends FormRequest
             'userName' => 'sometimes|required|string|unique:wp_users,userName,'.request()->wpUser->id,
             'firstName' => 'sometimes|required|string',
             'lastName' => 'sometimes|required|string',
-            'email' => 'sometimes|required|string|unique:wp_users,email,'.request()->wpUser->id,
+            'email' => 'sometimes|required|email|unique:wp_users,email,'.request()->wpUser->id,
         ];
     }
 
@@ -37,12 +37,13 @@ class UpdateWpUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'userName.required' => 'UserName is required!',
-            'firstName.required' => 'FirstName is required!',
-            'lastName.required' => 'LastName is required!',
-            'email.required' => 'Email is required!',
-            'userName.unique' => 'UserName already exist!',
-            'email.unique' => 'Email already exist!'
+            'userName.required' => 'UserName est requis!',
+            'firstName.required' => 'Le prénom est requis!',
+            'lastName.required' => 'Le nom est requis!',
+            'email.required' => "L'email est requis!",
+            'userName.unique' => 'UserName existe déjà!',
+            'email.unique' => "L'email existe déjà!",
+            'email.email'=> "L'email n'est pas valide"
         ];
     }
 }

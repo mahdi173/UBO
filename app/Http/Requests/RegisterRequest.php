@@ -25,7 +25,7 @@ class RegisterRequest extends FormRequest
             'userName' => 'required|string|unique:users,userName',
             'firstName' => 'required|string',
             'lastName' => 'required|string',
-            'email' => 'required|string|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'role_id'=> 'required|exists:roles,id',
         ];
     }
@@ -38,13 +38,14 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            'userName.required' => 'UserName is required!',
-            'firstName.required' => 'FirstName is required!',
-            'lastName.required' => 'LastName is required!',
-            'email.required' => 'Email is required!',
-            'userName.unique' => 'UserName already exist!',
-            'email.unique' => 'Email already exist!',
-            'role_id.exists'=> "Role doesn't exist!"
+            'userName.required' => "Username est requis!",
+            'firstName.required' => 'Le prénom est requis!',
+            'lastName.required' => 'Le nom est requis!',
+            'email.required' => "L'email est requis!",
+            'userName.unique' => 'Username existe déjà!',
+            'email.unique' => "L'email existe déjà!",
+            'role_id.exists'=> "Le rôle n'existe pas!",
+            'email.email'=> "L'email n'est pas valide"
         ];
     }
 }

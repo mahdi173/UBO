@@ -34,8 +34,8 @@ class StoreWpRoleRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Role name is required!',
-            'name.unique' => 'Role already exist!'
+            'name.required' => 'Le nom du rôle est requis!',
+            'name.unique' => 'Le rôle existe déjà!'
         ];
     }
 }
