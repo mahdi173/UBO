@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\WpUserService;
+use App\Actions\RetrieveWpUsersAction;
 use Illuminate\Console\Command;
 
 class RetrieveWpUsers extends Command
@@ -24,8 +24,8 @@ class RetrieveWpUsers extends Command
     /**
      * Execute the console command.
      */
-    public function handle(WpUserService $wpUserService): void
+    public function handle(RetrieveWpUsersAction $retrieveWpUsers): void
     {
-        $wpUserService->getAllWpUsers();   
+        $retrieveWpUsers();
     }
 }

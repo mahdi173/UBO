@@ -3,25 +3,21 @@
 namespace App\Services;
 
 use App\Models\UserSite;
-use App\Models\WpSite;
 use App\Models\WpUser;
 
 class UserSiteService
 {    
-    public function attach($id, mixed $target, array $data)
+    public function attach($site_id, $user_id, array $data)
     {
-        if($target instanceof WpUser){
-           $relation_exist= UserSite::where('wp_user_id', $target->id)
-                               ->where('wp_site_id', $id)->first();
+        $relation_exist= UserSite::where('wp_user_id', $user_id)
+                               ->where('wp_site_id', $site_id)->first();
            
-            if($relation_exist){
-                UserSite::where('wp_user_id', $target->id)
-                ->where('wp_site_id', $id)->update($data);
-            }else{
-                $target->sites()->attach($id, $data);
-            }
-        }else if($target instanceof WpSite){
-            $target->users()->attach($id, $data);
+        if($relation_exist){
+            UserSite::where('wp_user_id', $user_id)
+            ->where('wp_site_id', $site_id)->update($data);
+        }else{
+            $user= WpUser::findOrFail($user_id);
+            $user->sites()->attach($site_id, $data);
         }
     }
 }
