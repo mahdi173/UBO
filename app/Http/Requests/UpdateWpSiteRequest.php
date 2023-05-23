@@ -35,9 +35,9 @@ class UpdateWpSiteRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Site name is required!',
-            'domain.required' => 'Site domain is required!',
-            'name.unique' => 'Site already exist!'
+            'name.required' => 'Le nom du site est requis!',
+            'domain.required' => 'Le domain du site est requis!',
+            'name.unique' => 'Le site existe déjà!'
         ];
     }
 }

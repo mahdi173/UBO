@@ -24,7 +24,7 @@ class StoreWpUserRequest extends FormRequest
         return [
             'firstName' => 'required|string',
             'lastName' => 'required|string',
-            'email' => 'required|string|unique:wp_users,email'
+            'email' => 'required|email|unique:wp_users,email'
         ];
     }
 
@@ -36,11 +36,12 @@ class StoreWpUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'firstName.required' => 'FirstName is required!',
-            'lastName.required' => 'LastName is required!',
-            'email.required' => 'Email is required!',
-            'userName.unique' => 'UserName already exist!',
-            'email.unique' => 'Email already exist!'
+            'firstName.required' => 'Le prénom est requis!',
+            'lastName.required' => 'Le nom est requis!',
+            'email.required' => "L'email est requis!",
+            'userName.unique' => 'Username existe déjà!',
+            'email.unique' => "L'email existe déjà!",
+            'email.email'=> "L'email n'est pas valide"
         ];
     }
 }
