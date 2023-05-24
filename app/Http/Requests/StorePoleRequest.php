@@ -16,7 +16,7 @@ class StorePoleRequest extends FormRequest
     {
         return true;
     }
-
+   
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,6 +26,13 @@ class StorePoleRequest extends FormRequest
     {
         return [
             'name' => ['required', Rule::unique('poles', 'name')],
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'name.required' => 'Le champ nom est obligatoire!',
+            'name.unique' => 'ce nom existe déjà!',
         ];
     }
     
