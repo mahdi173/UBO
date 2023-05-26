@@ -29,6 +29,14 @@ class UpdateTypeRequest extends FormRequest
         ];
     }
     
+    public function messages()
+    {
+        return [
+            'name.required' => 'Le champ nom est obligatoire!',
+            'name.unique' => 'ce nom existe déjà!',
+        ];
+    }
+    
     /**
      * failedValidation
      *

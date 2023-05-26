@@ -26,6 +26,14 @@ class StoreTypeRequest extends FormRequest
             'name' => ['required', Rule::unique('types', 'name')],
         ];
     }
+    public function messages()
+    {
+        return [
+            'name.required' => 'Le champ nom est obligatoire!',
+            'name.unique' => 'ce nom existe déjà!',
+        ];
+    }
+    
     
     /**
      * failedValidation
