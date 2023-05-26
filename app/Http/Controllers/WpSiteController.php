@@ -43,6 +43,18 @@ class WpSiteController extends Controller
 
         return $this->wpSiteService->storeWpSite($request->all());
     }
+
+     /**
+     * affectUsersToSite
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function affectUsersToSite(Request $request): JsonResponse{
+        $this->authorize('view');
+        
+        return  $this->wpSiteService->affectUsers($request->all());
+    }
     
     /**
      * show
@@ -51,7 +63,7 @@ class WpSiteController extends Controller
      * @return JsonResponse
      */
     public function show(WpSite $wpSite): JsonResponse{
-        return response()->json($wpSite);
+        return $this->wpSiteService->showUsers($wpSite);
     }
    
     /**
@@ -80,11 +92,6 @@ class WpSiteController extends Controller
         $this->authorize('view');
 
         return $this->wpSiteService->deleteWpSite($wpSite);
-    }
-
-    public function showUsers( WpSite $wpSite)
-    {
-         return $this->wpSiteService->showUsers($wpSite);
     }
 
     /**

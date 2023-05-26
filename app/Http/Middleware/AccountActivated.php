@@ -20,11 +20,11 @@ class AccountActivated
         $user_token = PersonalAccessToken::where('token', $request->token)->first();
        
         if (!$user_token) {
-            return response()->json(['error' => 'Invalid token'], 404);
+            return response()->json(['error' => 'Invalid token'], 419);
         }
         
         if (!in_array('activate-account', $user_token->toArray()["abilities"])) {
-            abort(403, 'Unauthorized');
+            abort(403, 'Forbidden');
         }
         
         return $next($request);
