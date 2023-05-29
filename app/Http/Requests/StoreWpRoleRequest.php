@@ -22,7 +22,7 @@ class StoreWpRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=> "required|string|unique:wp_roles,name"
+            "name"=> "required|alpha|lowercase|unique:wp_roles,name"
         ];
     }
 
@@ -35,7 +35,9 @@ class StoreWpRoleRequest extends FormRequest
     {
         return [
             'name.required' => 'Le nom du rôle est requis!',
-            'name.unique' => 'Le rôle existe déjà!'
+            'name.unique' => 'Le rôle existe déjà!',
+            'name.alpha' => 'le nom du rôle doit uniquement être composé de caractères alphabétiques!',
+            'name.lowercase' => 'le nom du rôle doit être en minuscules uniquement!'
         ];
     }
 }

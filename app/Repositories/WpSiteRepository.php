@@ -78,4 +78,14 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
     public function getWpSiteByDomain(string $domain): ?WpSite{
         return WpSite::where("domain", $domain)->first();
     }
+
+    /**
+     * findById
+     *
+     * @param  int $id
+     * @return mixed
+     */
+    public function findById(int $id): ?WpSite{
+        return WpSite::where("id", $id)->first();
+    }
 }

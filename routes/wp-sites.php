@@ -9,5 +9,5 @@ Route::post('wp-sites', [WpSiteController::class, 'store'])->name('wp-sites.stor
 Route::put('wp-sites/{wpSite}', [WpSiteController::class, 'update'])->name('wp-sites.update');
 Route::delete('wp-sites/{wpSite}', [WpSiteController::class, 'destroy'])->name('wp-sites.destroy');
 Route::get('wp-sites/{wpSite}', [WpSiteController::class, 'show'])->name('wp-sites.show');
-Route::get('/wp-sites/{wpSite}', [WpSiteController::class, 'showUsers']);
 Route::patch('wp-sites/{id}', [WpSiteController::class ,'restore']);   
+Route::post('wp-sites-users', [WpSiteController::class, 'affectUsersToSite'])->name('wp-sites.affect');

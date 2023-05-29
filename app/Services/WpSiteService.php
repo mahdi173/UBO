@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Enum\ActionsEnum;
 use App\Models\WpSite;
 use App\Repositories\WpSiteRepository;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use stdClass;
@@ -16,7 +18,7 @@ class WpSiteService
      * @param  WpSiteRepository $wpSiteRepository
      * @return void
      */
-    public function __construct(private WpSiteRepository $wpSiteRepository)
+    public function __construct(private WpSiteRepository $wpSiteRepository, private UserSiteService $userSiteService)
     {
     }
     
@@ -31,7 +33,29 @@ class WpSiteService
         $wpSite= $this->wpSiteRepository->create($data);
         return response()->json($wpSite);
     }
-    
+     
+    /**
+     * affectUsers
+     *
+     * @param  array $data
+     * @return JsonResponse
+     */
+    public function affectUsers(array $data): JsonResponse 
+    { 
+        $wpSite = $this->wpSiteRepository->findById($data['id']);
+        
+        foreach($data['users'] as $user){
+            $this->userSiteService->attach($wpSite->id, $user["id"], [ 'roles'=> json_encode($user["roles"]), 
+                                                                    'username'=> $user["username"],
+                                                                    'etat'=> ActionsEnum::CREATE->value,
+                                                                    'created_at'=> Carbon::now(),
+                                                                    'updated_at'=> Carbon::now()                   
+                                                                    ]);
+        }
+        
+        return response()->json(["msg"=>"Users successfully added to site"], 200);
+    }
+
     /**
      * updateWpSite
      *
