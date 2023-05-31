@@ -106,26 +106,25 @@ class UserController extends Controller
 
         return $this->userService->deleteUser($user);
     }
-     
-    /**
-     * checkEmail
+      /**
+     * showDeletedData
      *
-     * @param  CheckEmailRequest $request
-     * @return JsonResponse
+     * @param  mixed $request
+     * @return void
      */
-    public function checkEmail(CheckEmailRequest $request): JsonResponse
+    public function showDeletedData(Request $request) 
     {
-        return $this->userService->sendResetPasswordEmail($request->email);
+        $this->authorize('view');
+        return $this->userService->showDeletedData($request);
     }
-    
-    /**
-     * resetPassword
+       /**
+     * restore
      *
-     * @param  ResetPasswordRequest $request
+     * @param  mixed $id
      * @return JsonResponse
      */
-    public function resetPassword(ResetPasswordRequest $request): JsonResponse
-    {
-        return $this->userService->resetUserPassword($request->all());
-    }   
+    public function restore (string $id){
+        $this->authorize('view');
+        return $this->userService->restore($id);
+    }
 }

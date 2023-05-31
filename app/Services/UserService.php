@@ -2,18 +2,19 @@
 
 namespace App\Services;
 
-use App\Interfaces\RoleRepositoryInterface;
-use App\Interfaces\UserRepositoryInterface;
+use stdClass;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Jobs\SendMailJob;
 use App\Mail\SendMailreset;
-use App\Models\User;
-use App\Repositories\UserRepository;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
-use stdClass;
+use App\Interfaces\RoleRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 
 class UserService
 {        
@@ -82,13 +83,12 @@ class UserService
     {           
         $response= new stdClass();
         $filter= User::filter($request->input('filters'),$request->input('sort'));
-
-        if(!$request->paginate){
-            $response->data= $filter->get();
-        }else{
-            $response= $filter->paginate($request->paginate);
+        if (!$request->paginate) {
+            $loggedUserId = Auth::user()->id;
+            $response->data = $filter->where('id', '!=', $loggedUserId)->get();
+        } else {
+            $response = $filter->where('id', '!=', $loggedUserId)->paginate($request->paginate);
         }
-
         return $response;
     }
 
@@ -176,4 +176,44 @@ class UserService
         
         return response()->json(['message' => 'Password updated Successfully']);
     }
+     
+        /**
+     * showDeletedData
+     *
+     * @param  mixed $request
+     * @return JsonResponse
+     */
+    public function showDeletedData(Request $request): mixed{
+        $response= new stdClass();
+
+        $deletedRecords=User::onlyTrashed()->filter(
+
+            $request->input('filters'),
+            $request->input('sort')
+            );
+           if(!$request->paginate){
+            $response->data= $deletedRecords->get();
+
+           }else{
+            $response= $deletedRecords->paginate($request->paginate);
+           }
+
+           return $response;
+    }
+    
+      /**
+     * restore
+     *
+     * @param  mixed $id
+     * @return JsonResponse
+     */
+    public function restore (string $id): JsonResponse{
+        
+        $record = User::withTrashed()->findOrFail($id);
+        $record->restore();
+        return response()->json([
+            'message' => 'User restored successfully',
+            'data' => $record
+        ]);
+} 
 }
