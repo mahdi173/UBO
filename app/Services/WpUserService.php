@@ -64,11 +64,14 @@ class WpUserService
      *
      * @param  array $data
      * @param  WpUser $wpUser
+     * @param  array $sites
      * @return JsonResponse
      */
-    public function updateWpUser(array $data, WpUser $wpUser): JsonResponse
+    public function updateWpUser(array $data, WpUser $wpUser, array $sites): JsonResponse
     {
         $this->wpUserRepository->update($wpUser, $data);
+
+        $this->userSiteService->sync($wpUser->id, $sites);
 
         return response()->json($wpUser, 200);
     }

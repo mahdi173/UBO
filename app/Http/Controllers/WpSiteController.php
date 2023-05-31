@@ -77,7 +77,7 @@ class WpSiteController extends Controller
     {
         $this->authorize('view');
 
-        return  $this->wpSiteService->updateWpSite($request->all(), $wpSite);
+        return  $this->wpSiteService->updateWpSite($request->all(), $wpSite, $request->users);
     }
 
     

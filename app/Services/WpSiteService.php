@@ -66,11 +66,15 @@ class WpSiteService
      *
      * @param  array $data
      * @param  WpSite $wpSite
+     * @param  array $users
      * @return JsonResponse
      */
-    public function updateWpSite(array $data, WpSite $wpSite): JsonResponse
+    public function updateWpSite(array $data, WpSite $wpSite, array $users): JsonResponse
     {
         $this->wpSiteRepository->update($wpSite, $data);
+       
+        $this->userSiteService->sync($wpSite->id, $users);
+
         return response()->json($wpSite, 200);
     }
     
