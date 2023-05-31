@@ -82,12 +82,12 @@ class UserService
     public function filter(Request $request): mixed
     {           
         $response= new stdClass();
-        $filter= User::filter($request->input('filters'),$request->input('sort'));
+        $filter= User::filter($request->input('filters'),$request->input('sort'))
+        ->where('id', '!=', Auth::id());
         if (!$request->paginate) {
-            $loggedUserId = Auth::user()->id;
-            $response->data = $filter->where('id', '!=', $loggedUserId)->get();
+            $response->data = $filter->get();
         } else {
-            $response = $filter->where('id', '!=', $loggedUserId)->paginate($request->paginate);
+            $response = $filter->paginate($request->paginate);
         }
         return $response;
     }
@@ -186,16 +186,16 @@ class UserService
     public function showDeletedData(Request $request): mixed{
         $response= new stdClass();
 
-        $deletedRecords=User::onlyTrashed()->filter(
+        $deletedUsers=User::onlyTrashed()->filter(
 
             $request->input('filters'),
             $request->input('sort')
             );
            if(!$request->paginate){
-            $response->data= $deletedRecords->get();
+            $response->data= $deletedUsers->get();
 
            }else{
-            $response= $deletedRecords->paginate($request->paginate);
+            $response= $deletedUsers->paginate($request->paginate);
            }
 
            return $response;
@@ -209,11 +209,11 @@ class UserService
      */
     public function restore (string $id): JsonResponse{
         
-        $record = User::withTrashed()->findOrFail($id);
-        $record->restore();
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
         return response()->json([
             'message' => 'User restored successfully',
-            'data' => $record
+            'data' => $user
         ]);
 } 
 }
