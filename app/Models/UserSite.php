@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,5 +20,15 @@ class UserSite extends Pivot
     public function site()
     {
         return $this->belongsTo(WpSite::class, 'wp_site_id');
+    }
+
+    /**
+     * logs
+     *
+     * @return MorphMany
+     */
+    public function logs(): MorphMany
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }
