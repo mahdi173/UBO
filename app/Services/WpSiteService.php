@@ -43,17 +43,22 @@ class WpSiteService
     public function affectUsers(array $data): JsonResponse 
     { 
         $wpSite = $this->wpSiteRepository->findById($data['id']);
-        
+
+        $username="";
+        if(isset($user["username"])){
+            $username= $user["username"];
+        }
+
         foreach($data['users'] as $user){
             $this->userSiteService->attach($wpSite->id, $user["id"], [ 'roles'=> json_encode($user["roles"]), 
-                                                                    'username'=> $user["username"],
+                                                                    'username'=> $username,
                                                                     'etat'=> ActionsEnum::CREATE->value,
                                                                     'created_at'=> Carbon::now(),
                                                                     'updated_at'=> Carbon::now()                   
                                                                     ]);
         }
         
-        return response()->json(["msg"=>"Users successfully added to site"], 200);
+        return response()->json(["message"=>"Users successfully added to site"]);
     }
 
     /**

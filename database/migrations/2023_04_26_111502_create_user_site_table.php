@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('wp_site_id')->references('id')->on('wp_sites')->onDelete('restrict')->onUpdate('restrict');
             $table->softDeletes(); 
             $table->json("roles");
-            $table->string("username");
+            $table->string("username")->nullable();
             $table->string('etat')->nullable();
             $table->timestamps();
         });
