@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enum\ActionsEnum;
+use App\Enum\CronStateEnum;
 use App\Models\WpUser;
 use App\Repositories\WpUserRepository;
 use Carbon\Carbon;
@@ -50,13 +50,13 @@ class WpUserService
         foreach($data['sites'] as $site){
             $this->userSiteService->attach($site["id"],  $wpUser->id, [ 'roles'=> json_encode($site["roles"]), 
                                                                     'username'=> $wpUser->userName,
-                                                                    'etat'=> ActionsEnum::CREATE->value,
+                                                                    'etat'=> CronStateEnum::Create->value,
                                                                     'created_at'=> Carbon::now(),
                                                                     'updated_at'=> Carbon::now()                   
                                                                     ]);
         }
         
-        return response()->json(["msg"=>"Sites successfully added to user"], 200);
+        return response()->json(["message"=>"Sites successfully added to user"], 200);
     }
     
     /**
@@ -173,5 +173,5 @@ class WpUserService
             'message' => 'User restored successfully',
             'data' => $record
         ]);
-} 
+    }
 }

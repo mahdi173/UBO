@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enum\ActionsEnum;
+use App\Enum\CronStateEnum;
 use App\Models\WpSite;
 use App\Repositories\WpSiteRepository;
 use Carbon\Carbon;
@@ -52,7 +52,7 @@ class WpSiteService
         foreach($data['users'] as $user){
             $this->userSiteService->attach($wpSite->id, $user["id"], [ 'roles'=> json_encode($user["roles"]), 
                                                                     'username'=> $username,
-                                                                    'etat'=> ActionsEnum::CREATE->value,
+                                                                    'etat'=> CronStateEnum::Create->value,
                                                                     'created_at'=> Carbon::now(),
                                                                     'updated_at'=> Carbon::now()                   
                                                                     ]);

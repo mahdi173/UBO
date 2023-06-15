@@ -5,5 +5,5 @@ enum StatusEnum:string
 {
     case SUCCESS = 'Success';
     case WARNING = 'Warning';
-    case DANGER = 'Fatal Error';
+    case DANGER = 'Error';
 }
