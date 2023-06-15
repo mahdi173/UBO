@@ -21,7 +21,7 @@ class UserSiteService
             $user->sites()->attach($site_id, $data);
         }
     }
-    
+
     /**
      * detach
      *
@@ -44,5 +44,23 @@ class UserSiteService
         }     
 
         return false;
+    }
+
+    public function sync(int $target, array $data)
+    {
+        foreach ($data as $element) {
+            $syncData=  ["roles"=> json_encode($element['roles']), "etat"=> CronStateEnum::ToUpdate->value];
+           
+            $relation_exist= UserSite::where('wp_user_id', $element['id'])
+            ->where('wp_site_id', $target)->first();
+
+            if($relation_exist){
+                UserSite::where('wp_user_id', $element['id'])
+                ->where('wp_site_id', $target)->update($syncData);
+            }else{
+                UserSite::where('wp_user_id', $target)
+                ->where('wp_site_id', $element['id'])->update($syncData);
+            }
+        }
     }
 }

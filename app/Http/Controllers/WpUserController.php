@@ -77,7 +77,7 @@ class WpUserController extends Controller
     { 
         $this->authorize('view');
 
-        return  $this->wpUserService->updateWpUser($request->all(), $wpUser);
+        return  $this->wpUserService->updateWpUser($request->all(), $wpUser, $request->sites);
     }
     
     /**
