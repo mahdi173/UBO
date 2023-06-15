@@ -83,7 +83,17 @@ class WpSiteService
     public function deleteWpSite( WpSite $wpSite): JsonResponse
     {
         $this->wpSiteRepository->delete($wpSite);
-        return response()->json(["msg"=>"Item successfully deleted!"], 200);
+
+        $userIds= $wpSite->users()->pluck('wp_users.id')->toArray();
+
+        foreach($userIds as $id){
+            $response= $this->userSiteService->detach($wpSite->id, $id);
+            if(!$response){
+                return response()->json(["message"=>"User or site doesn't exist!"], 404);
+            }
+        }   
+
+        return response()->json(["message"=>"User successfully deleted!"]);
     }
     
     /**

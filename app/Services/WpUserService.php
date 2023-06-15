@@ -98,7 +98,16 @@ class WpUserService
     {
         $this->wpUserRepository->delete($wpUser);
 
-        return response()->json(["msg"=>"Item successfully deleted!"], 200);
+        $siteIds= $wpUser->sites()->pluck('wp_sites.id')->toArray();
+     
+        foreach($siteIds as $id){
+            $response= $this->userSiteService->detach($id, $wpUser->id);
+            if(!$response){
+                return response()->json(["message"=>"User or site doesn't exist!"], 404);
+            }
+        }   
+
+        return response()->json(["message"=>"User successfully deleted!"]);
     }
     
     /**
