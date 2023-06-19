@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\WpUserController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('delete-site-user', [WpUserController::class, 'deleteUserSite'])->name('wp-users.deleteusersite');
 Route::get('wp-users/trash', [WpUserController::class, 'showDeletedData']);
 Route::get('wp-users', [WpUserController::class, 'index'])->name('wp-users.index');
 Route::post('wp-users', [WpUserController::class, 'store'])->name('wp-users.store');
