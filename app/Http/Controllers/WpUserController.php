@@ -92,6 +92,7 @@ class WpUserController extends Controller
 
         return$this->wpUserService->deleteWpUser($wpUser);
     }    
+
     /**
      * showDeletedData
      *
@@ -102,7 +103,8 @@ class WpUserController extends Controller
     {
         return $this->wpUserService->showDeletedData($request);
     }
-       /**
+    
+    /**
      * restore
      *
      * @param  mixed $id
@@ -110,5 +112,20 @@ class WpUserController extends Controller
      */
     public function restore (string $id){
         return $this->wpUserService->restore($id);
+    }
+    
+    /**
+     * deleteUserSite
+     *
+     * @param  Request $request
+     * @return JsonResponse
+     */
+    public function deleteUserSite(Request $request): JsonResponse
+    {
+        if($this->wpUserService->deleteSite($request->user_id, $request->site_id)){
+            return response()->json(["message"=>"Site/User successfully detached"]);
+        }else{
+            return response()->json(["message"=>"User or Site doesn't exist!"], 404);
+        }
     }
 }

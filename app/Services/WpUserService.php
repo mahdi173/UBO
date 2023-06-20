@@ -174,4 +174,15 @@ class WpUserService
             'data' => $record
         ]);
     }
+    
+    /**
+     * deleteSite
+     *
+     * @param  int $user_id
+     * @param  int $site_id
+     * @return bool
+     */
+    public function deleteSite(int $user_id, int $site_id): bool{
+       return $this->userSiteService->detach($site_id, $user_id);
+    }
 }
