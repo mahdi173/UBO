@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enum\CronStateEnum;
 use App\Interfaces\CrudInterface;
 use App\Models\WpUser;
 
@@ -65,7 +66,7 @@ class WpUserRepository implements CrudInterface
      */
     public function getById(int $id): mixed{
         return WpUser::with(['sites' => function ($query) {
-            $query->select('wp_sites.*', 'roles', 'username');
+            $query->select('wp_sites.*', 'roles', 'username')->where("etat","!=", CronStateEnum::ToDelete->value);
         }])->find($id);
     }
 
