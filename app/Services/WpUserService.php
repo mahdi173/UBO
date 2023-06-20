@@ -31,8 +31,17 @@ class WpUserService
      * @return JsonResponse
      */
     public function storeWpUser(array $data): JsonResponse 
-    { 
-        $wpUser = $this->wpUserRepository->create($data);
+    {   
+        $existedUser= $this->wpUserRepository->getWpUserByEmail($data["email"]);
+        
+        if($existedUser){
+            $data["deleted_at"]= null; 
+            unset($data["email"]);
+            $this->wpUserRepository->update( $existedUser, $data);
+            $wpUser =  $existedUser;
+        }else{
+            $wpUser = $this->wpUserRepository->create($data);
+        }
     
         return response()->json($wpUser, 200);
     }

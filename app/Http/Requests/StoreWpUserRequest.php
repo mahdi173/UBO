@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreWpUserRequest extends FormRequest
 {
@@ -24,7 +25,13 @@ class StoreWpUserRequest extends FormRequest
         return [
             'firstName' => 'required|string',
             'lastName' => 'required|string',
-            'email' => 'required|email|unique:wp_users,email'
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('wp_users', 'email')->where(function ($query) {
+                    $query->whereNull('deleted_at');
+                })
+            ],
         ];
     }
 

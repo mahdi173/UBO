@@ -21,7 +21,8 @@ class WpUser extends Model
         'userName',
         'firstName',
         'lastName',
-        'email'
+        'email',
+        'deleted_at'
     ];
     
     protected $casts = [

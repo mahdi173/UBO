@@ -21,7 +21,8 @@ class WpSite extends Model
         'name',
         'domain',
         'pole_id',
-        'type_id'
+        'type_id',
+        'deleted_at'
     ];
     
     protected $hidden = ['pole_id', 'type_id'];
