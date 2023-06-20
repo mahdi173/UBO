@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckEmailRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
@@ -52,13 +54,9 @@ class UserController extends Controller
      */
     public function verifyToken(Request $request): JsonResponse
     {
-        $response= $this->userService->verifyUserToken($request->token);
-        
-        if(gettype($response)=="string"){
-            return response()->json(['message' => 'Token is verified']);
-        }
-
-       return $response;   
+       $this->userService->verifyUserToken($request->token);
+       
+        return response()->json(['message' => 'Token is verified']);
     }
     
     /**
@@ -106,6 +104,28 @@ class UserController extends Controller
     {
         $this->authorize('view');
 
-        return$this->userService->deleteUser($user);
+        return $this->userService->deleteUser($user);
     }
+     
+    /**
+     * checkEmail
+     *
+     * @param  CheckEmailRequest $request
+     * @return JsonResponse
+     */
+    public function checkEmail(CheckEmailRequest $request): JsonResponse
+    {
+        return $this->userService->sendResetPasswordEmail($request->email);
+    }
+    
+    /**
+     * resetPassword
+     *
+     * @param  ResetPasswordRequest $request
+     * @return JsonResponse
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        return $this->userService->resetUserPassword($request->all());
+    }   
 }

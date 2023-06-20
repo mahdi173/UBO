@@ -15,14 +15,16 @@ class SendMailreset extends Mailable
 
     public $token;
     public $email;
+    public $route;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($token, $email)
+    public function __construct($token, $email, $route)
     {
         $this->token = $token;
         $this->email = $email;
+        $this->route = $route;
     }
 
     /**
@@ -44,7 +46,8 @@ class SendMailreset extends Mailable
             markdown: 'Email.passwordReset',
             with: [
                     'token' => $this->token,
-                    'email' => $this->email
+                    'email' => $this->email,
+                    'route' => $this->route
             ]
         );
     }
