@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enum\CronStateEnum;
 use App\Models\WpSite;
 use App\Interfaces\CrudInterface;
 use Illuminate\Http\JsonResponse;
@@ -51,7 +52,7 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
     
     public function showUsers(WpSite $wpSite) :JsonResponse{
         $siteWithUsers = WpSite::with(['pole', 'type', 'users' => function ($query) use ($wpSite) {
-            $query->select('wp_users.*','roles','user_site.username')
+            $query->select('wp_users.*','roles','user_site.username')->where("etat","!=", CronStateEnum::ToDelete->value)
                 ->whereHas('sites', function ($query) use ($wpSite) {
                     $query->where('wp_site_id', $wpSite->id);
                 });            
