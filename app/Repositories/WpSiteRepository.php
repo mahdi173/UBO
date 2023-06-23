@@ -7,6 +7,10 @@ use App\Models\WpSite;
 use App\Interfaces\CrudInterface;
 use Illuminate\Http\JsonResponse;
 use App\Interfaces\WpSiteRepositoryInterface;
+use App\Models\Pole;
+use App\Models\Type;
+use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface 
 {      
@@ -49,15 +53,40 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
     public function delete(mixed $wpSite): void{
         $wpSite->delete();
     }
-    
-    public function showUsers(WpSite $wpSite) :JsonResponse{
-        $siteWithUsers = WpSite::with(['pole', 'type', 'users' => function ($query) use ($wpSite) {
-            $query->select('wp_users.*','roles','user_site.username')->where("etat","!=", CronStateEnum::ToDelete->value)
-                ->whereHas('sites', function ($query) use ($wpSite) {
-                    $query->where('wp_site_id', $wpSite->id);
-                });            
-        }])->find($wpSite->id);
-        return response()->json($siteWithUsers, 200);   
+        
+    /**
+     * showUsers
+     *
+     * @param  WpSite $wpSite
+     * @return JsonResponse
+     */
+    public function showUsers(WpSite $wpSite) :JsonResponse
+    {
+        $response= new stdClass();
+
+        $type= Type::where('id', $wpSite->type_id)->first();
+        $pole= Pole::where('id', $wpSite->pole_id)->first();
+
+        $users = DB::table('user_site')
+                    ->join('wp_sites', 'user_site.wp_site_id', '=', 'wp_sites.id')
+                    ->join('wp_users', 'user_site.wp_user_id', '=', 'wp_users.id')
+                    ->select('wp_users.*', 'roles', 'user_site.username')
+                    ->where('user_site.wp_site_id', $wpSite->id)
+                    ->where('user_site.etat', '!=', CronStateEnum::ToDelete->value)
+                    ->where('user_site.deleted_at', '=', null)
+                    ->get();
+
+        $response= $wpSite;
+        $response->type= $type;
+        $response->pole= $pole;
+
+        foreach($users as $user){
+            $user->roles= json_decode( $user->roles);
+        }
+
+        $response->users= $users;
+
+        return response()->json($response, 200);   
     }
 
     /**
