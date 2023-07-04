@@ -194,4 +194,14 @@ class WpUserService
     public function deleteSite(int $user_id, int $site_id): bool{
        return $this->userSiteService->detach($site_id, $user_id);
     }
+
+     /**
+     * count WP Users
+     *
+     * @return void
+     */
+    public function count()
+    {
+         return $wpUsers= WpUser::count();
+    }
 }

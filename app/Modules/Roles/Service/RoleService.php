@@ -140,5 +140,14 @@ class RoleService implements RepositoryInterface{
            }else{
                return response()->json($deletedRecords);
            }
+    }    
+    /**
+     * count Roles
+     *
+     * @return void
+     */
+    public function count()
+    {
+         return $roles = Role::count();
     }
 }

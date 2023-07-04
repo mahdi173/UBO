@@ -142,5 +142,27 @@ class TypeService implements RepositoryInterface{
                return response()->json($deletedRecords);
            }
     }
+     /**
+     * count Types
+     *
+     * @return void
+     */
+    public function count()
+    {
+         return $types = Type::count();
+    }
+
+        /**
+     * SitesPerType
+     *
+     * @return void
+     */
+    public function SitesPerType(){
+        $types = Type::withCount('wpSites')
+        ->orderBy('wp_sites_count', 'desc')
+        ->take(5)
+        ->get();
+        return $types;
+    }
     }
 

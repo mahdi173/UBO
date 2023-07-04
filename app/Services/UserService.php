@@ -17,6 +17,7 @@ use App\Interfaces\RoleRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 
 class UserService
+
 {        
     /**
      * __construct
@@ -85,6 +86,7 @@ class UserService
         $filter= User::filter($request->input('filters'),$request->input('sort'))
         ->where('id', '!=', Auth::id());
         if (!$request->paginate) {
+
             $response->data = $filter->get();
         } else {
             $response = $filter->paginate($request->paginate);
@@ -216,4 +218,13 @@ class UserService
             'data' => $user
         ]);
 } 
+ /**
+     * count Users
+     *
+     * @return void
+     */
+    public function count()
+    {
+         return $users= User::count();
+    }
 }

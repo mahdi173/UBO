@@ -127,4 +127,16 @@ class UserController extends Controller
         $this->authorize('view');
         return $this->userService->restore($id);
     }
+
+  
+    /**
+     * resetPassword
+     *
+     * @param  ResetPasswordRequest $request
+     * @return JsonResponse
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        return $this->userService->resetUserPassword($request->all());
+    }   
 }

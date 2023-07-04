@@ -139,4 +139,28 @@ class PoleService implements RepositoryInterface{
                return response()->json($deletedRecords);
            }
     }
+    
+    /**
+     * count Poles
+     *
+     * @return void
+     */
+    public function count()
+    {
+       return $poles = Pole::count();
+    }
+    
+    
+ /**
+     * SitesPerPole
+     *
+     * @return void
+     */
+    public function SitesPerPole(){
+        $poles = Pole::withCount('wpSites')
+        ->orderBy('wp_sites_count', 'desc')
+        ->take(5)
+        ->get();
+        return $poles;
+    }
 }

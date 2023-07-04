@@ -32,7 +32,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     require base_path("app/Modules/Poles/routes/poleRoutes.php");
     require base_path("app/Modules/Types/routes/typeRoutes.php");
     require base_path("app/Modules/Roles/routes/roleRoutes.php");
-
+    require base_path("app/Statistiques/Routes/StatistiqueRoutes.php");
+    
     Route::get('/logs', [LogController::class, 'index']);
 });
 
