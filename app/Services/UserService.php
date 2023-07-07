@@ -41,7 +41,7 @@ class UserService
         $email= $user->email;
         $user_token= $user->createToken('password-token', ['activate-account']);
 
-        $mail= new SendMailreset($user_token->accessToken->token, $email);
+        $mail= new SendMailreset($user_token->accessToken->token, $email, "resetpassword");
         SendMailJob::dispatch($mail);
         
         return response()->json([
@@ -113,19 +113,19 @@ class UserService
      * verifyUserToken
      *
      * @param  string $token
-     * @return JsonResponse|string
+     * @return User
      */
-    public function verifyUserToken(string $token): JsonResponse|string
+    public function verifyUserToken(string $token): User
     {
         $user_token = PersonalAccessToken::where('token', $token)->first();
 
-        $user= User::where("id", $user_token->toArray()["tokenable_id"])->first();   
+        $user= User::findOrFail($user_token->toArray()["tokenable_id"]);   
 
         if($user->email_verified_at){
-            return response()->json(['error' => 'Token expired'], 419);
+            abort(419, 'Token expired');
         }
         
-        return $user->email;
+        return $user;
     }
     
     /**
@@ -136,19 +136,44 @@ class UserService
      */
     public function createUserPassword(array $data): JsonResponse
     {
-        $response= $this->verifyUserToken($data["token"]);
+        $user= $this->verifyUserToken($data["token"]);
 
-        if(gettype($response)=="string"){
-            $user= User::where("email", $response)->first();   
+        $this->userRepository->update($user, ["password"=>bcrypt( $data["password"]),
+                                                "email_verified_at"=> Carbon::now()
+                                            ]
+                                    );
+        
+        return response()->json(['message' => 'Password updated Successfully']);
+    }
+    
+    /**
+     * sendResetPasswordEmail
+     *
+     * @param  string $email
+     * @return JsonResponse
+     */
+    public function sendResetPasswordEmail(string $email): JsonResponse{
+        $user= $this->userRepository->getUserByEmail($email);
 
-            $this->userRepository->update($user, ["password"=>bcrypt( $data["password"]),
-                                                    "email_verified_at"=> Carbon::now()
-                                                ]
-                                        );
-            
-            return response()->json(['message' => 'Password updated Successfully']);
-        }
+        $user_token= $user->createToken('reset-password-token', ['reset-password'], now()->addMinutes(10));
 
-        return $response;
+        $mail= new SendMailreset($user_token->accessToken->token, $email, "forgotpassword");
+        SendMailJob::dispatch($mail);
+                
+        return response()->json(['message' => 'Email sent successfully']);
+    }
+    
+    /**
+     * resetUserPassword
+     *
+     * @param  array $data
+     * @return JsonResponse
+     */
+    public function resetUserPassword(array $data): JsonResponse{
+        $user= $this->verifyUserToken($data["token"]);
+
+        $this->userRepository->update($user, ["password"=>bcrypt( $data["password"])]);
+        
+        return response()->json(['message' => 'Password updated Successfully']);
     }
 }

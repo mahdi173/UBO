@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\WpSiteController;
-use App\Http\Controllers\WpUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +38,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::post('users/verify-token', [UserController::class, 'verifyToken'])->middleware('verify.email');
 Route::post('users/create-password', [UserController::class, 'createPassword'])->middleware('verify.email');
+
+Route::post('users/check-email', [UserController::class, 'checkEmail'])->name('users.checkemail');
+Route::post('users/reset-password', [UserController::class, 'resetPassword'])->name('users.resetpassword')->middleware('verify.reset.token');
 
 Route::post('/login', [AuthController::class, 'login']);
