@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreWpSiteRequest extends FormRequest
 {
@@ -22,7 +23,13 @@ class StoreWpSiteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=> "required|string|unique:wp_sites,name",
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('wp_sites', 'name')->where(function ($query) {
+                    $query->whereNull('deleted_at');
+                })
+            ],
             "domain"=> "required|string"
         ];
     }

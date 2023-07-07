@@ -44,7 +44,7 @@ class WpUserRepository implements CrudInterface
      * @return void
      */
     public function update(mixed $wpUser, array $data): void {
-      $wpUser->update($data);
+        $wpUser->update($data);
     }
       
     /**
@@ -76,7 +76,7 @@ class WpUserRepository implements CrudInterface
      * @return WpUser
      */
     public function getWpUserByEmail(string $email): ?WpUser{
-        return WpUser::where("email", $email)->first();
+        return WpUser::withTrashed()->where("email", $email)->first();
     }
 
     /**

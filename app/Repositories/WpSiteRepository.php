@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\WpSite;
 use App\Interfaces\CrudInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Interfaces\WpSiteRepositoryInterface;
 
 class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface 
@@ -49,6 +48,7 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
     public function delete(mixed $wpSite): void{
         $wpSite->delete();
     }
+    
     public function showUsers(WpSite $wpSite) :JsonResponse{
         $siteWithUsers = WpSite::with(['pole', 'type', 'users' => function ($query) use ($wpSite) {
             $query->select('wp_users.*','roles','user_site.username')
@@ -66,7 +66,7 @@ class WpSiteRepository implements CrudInterface,WpSiteRepositoryInterface
      * @return WpSite
      */
     public function getWpSiteByName(string $name): ?WpSite{
-        return WpSite::where("name", $name)->first();
+        return WpSite::withTrashed()->where("name", $name)->first();
     }
 
      /**

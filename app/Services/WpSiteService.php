@@ -30,7 +30,16 @@ class WpSiteService
      */
     public function storeWpSite(array $data): JsonResponse
     {
-        $wpSite= $this->wpSiteRepository->create($data);
+        $existedSite= $this->wpSiteRepository->getWpSiteByName($data["name"]);
+        
+        if($existedSite){
+            $data["deleted_at"]= null; 
+            unset($data["name"]);
+            $this->wpSiteRepository->update( $existedSite, $data);
+            $wpSite =  $existedSite;
+        }else{
+            $wpSite= $this->wpSiteRepository->create($data);
+        }
         return response()->json($wpSite);
     }
      
