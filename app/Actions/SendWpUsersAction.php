@@ -60,7 +60,7 @@ class SendWpUsersAction
     }
 
     public function makeUserData($data){
-        return ["roles"=>$data->roles, 
+        return ["roles"=>json_decode($data->roles), 
                 "email"=>$data->email, 
                 "username"=>$data->userName, 
                 "firstname"=>$data->firstName, 

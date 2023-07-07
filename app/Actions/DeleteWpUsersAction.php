@@ -43,7 +43,7 @@ class DeleteWpUsersAction
     public function sendToDeleteUsers(mixed $data, string $domain): void {
         foreach($data as $userSite){
             $response= Http::accept('application/json')
-                            ->delete('http://'.$domain.WpEndpointsEnum::USERS->value, $userSite->email);
+                            ->delete('http://'.$domain.WpEndpointsEnum::USERS->value, ["email"=>$userSite->email]);
            
             $existedUserSite=  UserSite::find($userSite->id);
 

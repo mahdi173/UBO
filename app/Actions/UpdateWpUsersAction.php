@@ -82,7 +82,7 @@ class UpdateWpUsersAction
      * @return array
      */
     public function makeUserData(mixed $data): array{
-        return ["roles"=>$data->roles, 
+        return ["roles"=>json_decode($data->roles), 
                 "email"=>$data->email, 
                 "firstname"=>$data->firstName, 
                 "lastname"=>$data->lastName
