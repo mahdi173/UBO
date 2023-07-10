@@ -173,4 +173,28 @@ class WpSiteService
             'data' => $record
         ]);
 }
+ /**
+     * count WP Sites
+     *
+     * @return void
+     */
+    public function count()
+    {
+         return $wpSites= WpSite::count();
+    }
+    
+    /**
+     * getUsersRolesInSite
+     *
+     * @return void
+     */
+    public function getUsersRolesInSite()
+    {
+        $wpSites = WpSite::withCount(['users', 'users as roles_count' => function ($query) {
+            $query->select('roles')
+                  ->whereNotNull('roles');
+        }])->get();
+    
+        return  $wpSites;
+    }
 }

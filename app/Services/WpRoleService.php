@@ -118,4 +118,13 @@ class WpRoleService
             'data' => $record
         ]);
 }
+ /**
+     * count WP Roles
+     *
+     * @return void
+     */
+    public function count()
+    {
+         return $wpRoles= WpRole::count();
+    }
 }

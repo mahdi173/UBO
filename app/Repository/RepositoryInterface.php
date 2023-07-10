@@ -14,4 +14,5 @@ interface RepositoryInterface
     public function show(string $id);
     public function restore(string $id);
     public function showDeletedData(Request $request);
+    public function count();
 }
