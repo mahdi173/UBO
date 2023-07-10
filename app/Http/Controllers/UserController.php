@@ -43,7 +43,7 @@ class UserController extends Controller
     {
         $this->authorize('view');
   
-        return  $this->userService->storeUser($request->all());
+        return  $this->userService->storeUser($request);
     }
     
     /**
