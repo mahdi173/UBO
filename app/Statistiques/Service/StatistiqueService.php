@@ -27,6 +27,7 @@ class StatistiqueService {
 
         public function statistics()
         {
+
             $poleCount = $this->poleService->count();
             $sitesPerPole = $this->poleService->SitesPerPole();
             $roleCount = $this->roleService->count();
@@ -36,10 +37,9 @@ class StatistiqueService {
             $wpRoleCount = $this->wpRoleService->count();
             $wpUsersCount = $this->wpUserService->count();
             $wpSitesCount = $this->wpSiteService->count();
-            $userRolesInSite = $this->wpSiteService->getUsersRolesInSite();
+      
 
-            $statistics = [
-
+            $count = [
                 'poles' => $poleCount,
                 'roles' => $roleCount,
                 'types' => $typeCount,
@@ -47,9 +47,12 @@ class StatistiqueService {
                 'WpRoles' => $wpRoleCount,
                 'WpUsers' => $wpUsersCount,
                 'WpSites' => $wpSitesCount,
+            ];
+
+            $statistics = [
+                'count' => $count,
                 'sitesPerPole' =>$sitesPerPole,
                 'sitesPerType' =>$sitesPerType,
-                'userRolesInSite' =>$userRolesInSite
             ];
         
             return $statistics;
