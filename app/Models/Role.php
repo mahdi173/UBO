@@ -40,7 +40,40 @@ class Role extends Model
     {
         return $this->morphMany(Log::class, 'loggable');
     }
-
+  
+   /**
+    * getCreatedAtAttribute
+    *
+    * @param  mixed $value
+    * @return void
+    */
+   public function getCreatedAtAttribute($value)
+   {
+       return date('Y-m-d H:m:s', strtotime($value));
+   }   
+   /**
+    * getDeletedAtAttribute
+    *
+    * @param  mixed $value
+    * @return void
+    */
+   public function getDeletedAtAttribute($value)
+   {
+       if(!is_null($value)){
+        return date('Y-m-d H:m:s ', strtotime($value));
+       }
+   }
+   
+   /**
+    * getUpdatedAtAttribute
+    *
+    * @param  mixed $value
+    * @return void
+    */
+   public function getUpdatedAtAttribute($value)
+   {
+       return date('Y-m-d H:m:s ', strtotime($value));
+   }
     
        /**
      * Method scopeFilters
