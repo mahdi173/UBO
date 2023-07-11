@@ -183,18 +183,4 @@ class WpSiteService
          return $wpSites= WpSite::count();
     }
     
-    /**
-     * getUsersRolesInSite
-     *
-     * @return void
-     */
-    public function getUsersRolesInSite()
-    {
-        $wpSites = WpSite::withCount(['users', 'users as roles_count' => function ($query) {
-            $query->select('roles')
-                  ->whereNotNull('roles');
-        }])->get();
-    
-        return  $wpSites;
-    }
 }
