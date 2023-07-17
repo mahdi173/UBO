@@ -67,7 +67,7 @@ class UserRepository implements UserRepositoryInterface, CrudInterface
      * @return User
      */
     public function getUserByEmail(string $email): User|null {
-        return  User::where('email', $email)->first();
+        return  User::withTrashed()->where('email', $email)->first();
     }
 }
    

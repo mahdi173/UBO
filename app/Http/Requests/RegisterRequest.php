@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class RegisterRequest extends FormRequest
             'userName' => 'required|string|unique:users,userName',
             'firstName' => 'required|string',
             'lastName' => 'required|string',
-            'email' => 'required|email|unique:users,email',
+            'email'=> 'required|email|unique:users,deleted_at,NULL',
             'role_id'=> 'required|exists:roles,id',
         ];
     }

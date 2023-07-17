@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\RegisterRequest;
 use stdClass;
 use Carbon\Carbon;
 use App\Models\User;
@@ -34,17 +35,33 @@ class UserService
     /**
      * storeUser
      *
-     * @param  array $data
+     * @param  RegisterRequest $request
      * @return JsonResponse
      */
-    public function storeUser(array $data): JsonResponse
+    public function storeUser(RegisterRequest $request): JsonResponse
     {
-        $user = $this->userRepository->create($data);
-        $email= $user->email;
-        $user_token= $user->createToken('password-token', ['activate-account']);
+        $data= $request->all();
 
-        $mail= new SendMailreset($user_token->accessToken->token, $email, "resetpassword");
-        SendMailJob::dispatch($mail);
+        $existedUser= $this->userRepository->getUserByEmail($data["email"]);
+
+        if($existedUser){ 
+            $data= $request->except('email');
+
+            $existedUser->restore();
+
+            $this->userRepository->update( $existedUser, $data);
+            $user =  $existedUser;
+
+            $this->sendResetPasswordEmail($user->email);
+        }else{
+            $user = $this->userRepository->create($data);
+
+            $email= $user->email;
+            $user_token= $user->createToken('password-token', ['activate-account']);
+
+            $mail= new SendMailreset($user_token->accessToken->token, $email, "resetpassword");
+            SendMailJob::dispatch($mail);
+        }
         
         return response()->json([
             'message' => 'User Created Successfully',
@@ -71,7 +88,7 @@ class UserService
 
         $token = $user->createToken('apiToken')->plainTextToken;
 
-        return ['user' => $user, 'token' => $token];
+        return ['user' =>  $user->load('role:id,name'), 'token' => $token];
     }
 
      /**
