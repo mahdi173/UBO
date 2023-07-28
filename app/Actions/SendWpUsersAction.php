@@ -6,11 +6,15 @@ use App\Enum\ActionsEnum;
 use App\Enum\CronStateEnum;
 use App\Enum\StatusEnum;
 use App\Enum\WpEndpointsEnum;
+use App\Jobs\SendMailJob;
+use App\Mail\SendPwdWpUser;
 use App\Models\UserSite;
 use App\Models\WpSite;
 use App\Traits\CreateLogInstanceTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class SendWpUsersAction
 {
@@ -42,7 +46,10 @@ class SendWpUsersAction
 
             $existedUserSite=  UserSite::find($userSite->id);
 
-            if($response->ok()){
+            if($response->ok()){ 
+                $mail= new SendPwdWpUser($userData['email'], $userData['password'], $domain);
+                SendMailJob::dispatch($mail);
+
                 UserSite::where('wp_user_id',$userSite->wp_user_id)
                 ->where('wp_site_id', $userSite->wp_site_id)->update(['etat'=> CronStateEnum::Active->value]);
 
@@ -64,7 +71,8 @@ class SendWpUsersAction
                 "email"=>$data->email, 
                 "username"=>$data->userName, 
                 "firstname"=>$data->firstName, 
-                "lastname"=>$data->lastName
+                "lastname"=>$data->lastName,
+                "password"=> Str::random(8)
                 ];
     }
 }
