@@ -96,10 +96,9 @@ class WpRoleTest extends TestCase
     }
 
     public function getUserToken(){
-        $user=  User::factory()->create();
         $loginData = [
-            "email" => $user->email,
-            "password" => "secret",
+            "email" => "admin@email.com",
+            "password" => "admin",
         ];
 
         $response= $this->json('POST', 'api/login', $loginData, ['Accept' => 'application/json']);

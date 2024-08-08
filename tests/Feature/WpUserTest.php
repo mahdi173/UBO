@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\WpSite;
 use App\Models\WpUser;
 use App\Traits\RequestTrait;
 use Tests\TestCase;
@@ -38,6 +39,39 @@ class WpUserTest extends TestCase
         $url= 'api/wp-users';
 
         $this->makeRequest($token, 'POST', $url, $param, 200, $structure,  $data->toArray());
+    }
+
+    public function test_affect_sites_to_wpuser_succefully(): void
+    {
+        $user= WpUser::factory()->create();
+
+        $site1= WpSite::inRandomOrder()->first();
+        $site2= WpSite::inRandomOrder()->first();
+
+
+        $token= $this->getUserToken();
+
+        $data = [
+            "id" => $user->id,
+            "sites" => [
+                [
+                    "id"=> $site1->id,
+			        "roles"=> ["Editor", "Author"]
+                ],
+                [
+                    "id"=> $site2->id,
+			        "roles"=> ["Editor", "Contributor"]
+                ]
+            ]
+        ];
+
+        $structure= ["msg"];
+
+
+        $param= ['Accept' => 'application/json'];
+        $url= 'api/wp-users-sites';
+
+        $this->makeRequest($token, 'POST', $url, $param, 200, $structure, $data);
     }
 
     public function test_update_wpuser_succefully(): void
@@ -109,10 +143,9 @@ class WpUserTest extends TestCase
     }
     
     public function getUserToken(){
-        $user=  User::factory()->create();
         $loginData = [
-            "email" => $user->email,
-            "password" => "secret",
+            "email" => "admin@email.com",
+            "password" => "admin",
         ];
 
         $response= $this->json('POST', 'api/login', $loginData, ['Accept' => 'application/json']);
